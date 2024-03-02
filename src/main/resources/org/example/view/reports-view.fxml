@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="683.0" prefWidth="912.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.v4pa.controller.ReportsController">
+   <children>
+      <HBox layoutX="85.0" layoutY="125.0" prefHeight="54.0" prefWidth="474.0">
+         <children>
+            <GridPane prefHeight="51.0" prefWidth="467.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="119.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="118.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="79.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="23.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="127.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="118.0" text="Appointment Type" />
+                  <ChoiceBox fx:id="reportsTotalApptsApptTypeDropdown" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </ChoiceBox>
+                  <ButtonBar prefHeight="30.0" prefWidth="122.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                     <buttons>
+                        <TextField fx:id="reportsTotalApptsText" alignment="CENTER" prefHeight="25.0" prefWidth="127.0" />
+                     </buttons>
+                  </ButtonBar>
+                  <Button fx:id="reportsTotalApptsReportButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Generate Report" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="142.0" text="Total Appointments" textAlignment="CENTER" GridPane.columnIndex="4" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <Label layoutX="57.0" layoutY="99.0" prefHeight="18.0" prefWidth="187.0" text="Total Appointments By Type">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="44.0" layoutY="38.0" text="Reports">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Line endX="761.0" layoutX="130.0" layoutY="89.0" startX="-100.0" />
+      <Line endX="757.0" layoutX="130.0" layoutY="194.0" startX="-100.0" />
+      <HBox layoutX="71.0" layoutY="231.0" prefHeight="54.0" prefWidth="502.0">
+         <children>
+            <GridPane prefHeight="50.0" prefWidth="467.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="169.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="128.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="16.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="22.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="132.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ButtonBar prefHeight="31.0" prefWidth="111.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="reportsContactComboBox" prefHeight="25.0" prefWidth="154.0" GridPane.rowIndex="1" />
+                  <Button fx:id="reportsContactScheduleReportButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" text="Generate Report" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" prefHeight="29.0" prefWidth="153.0" text="Contact" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <Label layoutX="57.0" layoutY="206.0" text="Contact Schedule">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Line endX="753.0" layoutX="132.0" layoutY="527.0" startX="-100.0" />
+      <HBox layoutX="57.0" layoutY="555.0" prefHeight="38.0" prefWidth="474.0">
+         <children>
+            <GridPane prefHeight="54.0" prefWidth="486.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="120.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="142.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="80.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="132.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ButtonBar prefHeight="45.0" prefWidth="71.0" GridPane.columnIndex="3" />
+                  <TextField fx:id="reportsTotalCustomersText" maxWidth="96.0" minWidth="70.0" prefHeight="25.0" prefWidth="96.0" />
+                  <Button fx:id="reportsCustomersAddedReportButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Generate Report" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <Label layoutX="59.0" layoutY="537.0" prefHeight="18.0" prefWidth="118.0" text="Total Customers">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Line endX="752.0" layoutX="134.0" layoutY="602.0" startX="-100.0" />
+      <ButtonBar layoutX="599.0" layoutY="610.0" prefHeight="67.0" prefWidth="287.0">
+         <buttons>
+            <Button fx:id="reportsApptDetailsButton" mnemonicParsing="false" onAction="#onActionDisplayApptDetailsFromReports" prefHeight="48.0" prefWidth="135.0" text="Appointment Details" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="reportsCustDetailsButton" mnemonicParsing="false" onAction="#onActionDisplayCustDetailsFromReports" prefHeight="48.0" prefWidth="120.0" text="Customer Details" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </buttons>
+      </ButtonBar>
+      <TableView layoutX="38.0" layoutY="292.0" prefHeight="222.0" prefWidth="832.0">
+        <columns>
+          <TableColumn prefWidth="57.0" text="Appt. ID" />
+          <TableColumn prefWidth="124.0" text="Title" />
+            <TableColumn prefWidth="83.0" text="Type" />
+            <TableColumn prefWidth="223.0" text="Description" />
+            <TableColumn prefWidth="134.0" text="Start Date / Time" />
+            <TableColumn prefWidth="123.0" text="End Date / Time" />
+            <TableColumn prefWidth="87.0" text="Customer ID" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
