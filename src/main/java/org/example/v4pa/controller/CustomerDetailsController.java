@@ -7,10 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.CustomerQuery;
@@ -18,6 +15,8 @@ import org.example.v4pa.model.Customer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerDetailsController implements Initializable {
@@ -89,8 +88,8 @@ public class CustomerDetailsController implements Initializable {
             loader.setLocation(getClass().getResource("/org/example/view/edit-customer-view.fxml"));
             loader.load();
 
-            EditCustomerController EditController = loader.getController();
-            EditController.sendCustomer(custdetailsTableView.getSelectionModel().getSelectedItem());
+            EditCustomerController EditCustController = loader.getController();
+            EditCustController.sendCustomer(custdetailsTableView.getSelectionModel().getSelectedItem());
 
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             Parent scene = loader.getRoot();
@@ -117,7 +116,25 @@ public class CustomerDetailsController implements Initializable {
 
     @FXML
     void onActionDeleteCust(ActionEvent event) {
-
+        /** LOGICAL ERROR: This error occurs if no part is selected for deletion. */
+        if (custdetailsTableView.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Please select a Customer to delete.");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the selected customer. Are you sure you want to continue?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CustomerQuery.deleteCustomer(custdetailsTableView.getSelectionModel().getSelectedItem().getCustomerID());
+            }
+            custdetailsTableView.setItems(CustomerQuery.getAllCustomers());
+        } catch (NullPointerException e) {
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -47,7 +47,6 @@ public class EditCustomerController implements Initializable {
     private Button editcustomerSaveButton;
     @FXML
     private ComboBox<FirstLevelDivision> editcustomerProvinceComboBox;
-    private String[] countries = {"Canada", "United Kingdom", "United States"};
 
     @FXML
     void onActionCancelEditCustToCustDetails(ActionEvent event) throws IOException {
@@ -137,7 +136,7 @@ public class EditCustomerController implements Initializable {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new customer?");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the customer edits?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
@@ -148,7 +147,6 @@ public class EditCustomerController implements Initializable {
             stage.setScene(new Scene(scene));
             stage.show();
         }
-
 
     }
 

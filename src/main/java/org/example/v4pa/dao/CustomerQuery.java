@@ -3,10 +3,13 @@ package org.example.v4pa.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.example.v4pa.model.Customer;
+import org.example.v4pa.model.FirstLevelDivision;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.PropertyPermission;
+
 public abstract class CustomerQuery {
 
     public static ObservableList<Customer> getAllCustomers() {
@@ -14,7 +17,6 @@ public abstract class CustomerQuery {
         String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
                 "FROM customers, first_level_divisions\n" +
                 "WHERE customers.Division_ID = first_level_divisions.Division_ID";
-        // Add Country ID to Customer model
         try {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -62,29 +64,84 @@ public abstract class CustomerQuery {
         return rowsAffected;
     }
 
-    public static void select(int colorId) throws SQLException {
-        String sql = "SELECT * FROM FRUITS WHERE Color_ID = ?";
+    public static int deleteCustomer(int customerID) throws SQLException {
+        String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, colorId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int fruitId = rs.getInt("Fruit_ID");
-            int color_id = rs.getInt("Color_ID");
-            String fruitName = rs.getString("Fruit_Name");
-            System.out.print(fruitId + " | ");
-            System.out.print(fruitName + " | ");
-            System.out.print(color_id + "\n");
-        }
+        ps.setInt(1, customerID);
+        int rowsAffected = ps.executeUpdate();
+
+        return rowsAffected;
     }
-    public static void selectAll () throws SQLException {
-        String sql = "SELECT * FROM first_level_divisions";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int divisionID = rs.getInt("Division_ID");
-            String divisionName = rs.getString("Division");
-            System.out.print(divisionID + " | ");
-            System.out.print(divisionName + "\n");
+
+    public static Customer findCustomerID(String customerName) {
+        ObservableList<Customer> customerList = getAllCustomers();
+        for(Customer testCustomer : customerList) {
+            if (testCustomer.getCustomerName().contains(customerName)) {
+                return testCustomer;
+            }
         }
+        return null;
     }
+
+    public static Customer findCustomerName(int customerID) {
+        ObservableList<Customer> customerList = getAllCustomers();
+        for(Customer testCustomer : customerList) {
+            if (testCustomer.getCustomerID() == (customerID)) {
+                return testCustomer;
+            }
+        }
+        return null;
+    }
+
+
+    public static ObservableList<Customer> selectCustomer(int customerID) throws SQLException {
+        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
+        "FROM customers, first_level_divisions\n" +
+                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_ID = ?";;
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setInt(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postalCode = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int divisionID = rs.getInt("Division_ID");
+                int countryID = rs.getInt("Country_ID");
+                Customer c = new Customer(customerID, name, address, postalCode, phone, divisionID, countryID);
+                customerList.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerList;
+    }
+
+    public static ObservableList<Customer> selectCustomer(String customerName) throws SQLException {
+        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
+                "FROM customers, first_level_divisions\n" +
+                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_Name = ?";;
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setString(1, customerName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("Customer_ID");
+                String address = rs.getString("Address");
+                String postalCode = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int divisionID = rs.getInt("Division_ID");
+                int countryID = rs.getInt("Country_ID");
+                Customer c = new Customer(id, customerName, address, postalCode, phone, divisionID, countryID);
+                customerList.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerList;
+    }
+
 }

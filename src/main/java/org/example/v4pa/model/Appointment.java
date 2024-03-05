@@ -1,5 +1,8 @@
 package org.example.v4pa.model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Appointment {
 
     public static int apptCounter = 1;
@@ -14,6 +17,10 @@ public class Appointment {
     private int apptCustomerID;
     private int apptUserID;
     private int apptContactID;
+
+    private static ObservableList<Contact> associatedContact = FXCollections.observableArrayList();
+    private static ObservableList<Customer> associatedCustomer = FXCollections.observableArrayList();
+    private static ObservableList<User> associatedUser = FXCollections.observableArrayList();
 
     public Appointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, int apptCustomerID, int apptUserID, int apptContactID) {
         this.apptID = apptID;
@@ -88,38 +95,6 @@ public class Appointment {
         this.apptEnd = apptEnd;
     }
 
-//    public int getApptCreateDate() {
-//        return apptCreateDate;
-//    }
-//
-//    public void setApptCreateDate(int apptCreateDate) {
-//        this.apptCreateDate = apptCreateDate;
-//    }
-//
-//    public String getApptCreatedBy() {
-//        return apptCreatedBy;
-//    }
-//
-//    public void setApptCreatedBy(String apptCreatedBy) {
-//        this.apptCreatedBy = apptCreatedBy;
-//    }
-//
-//    public int getApptUpdateDate() {
-//        return apptUpdateDate;
-//    }
-//
-//    public void setApptUpdateDate(int apptUpdateDate) {
-//        this.apptUpdateDate = apptUpdateDate;
-//    }
-//
-//    public String getApptLastUpdatedBy() {
-//        return apptLastUpdatedBy;
-//    }
-//
-//    public void setApptLastUpdatedBy(String apptLastUpdatedBy) {
-//        this.apptLastUpdatedBy = apptLastUpdatedBy;
-//    }
-
     public int getApptCustomerID() {
         return apptCustomerID;
     }
@@ -142,5 +117,21 @@ public class Appointment {
 
     public void setApptContactID(int apptContactID) {
         this.apptContactID = apptContactID;
+    }
+
+    public ObservableList<Customer> getAssociatedCustomer() { return associatedCustomer; }
+    public ObservableList<User> getAssociatedUser() { return associatedUser; }
+    public ObservableList<Contact> getAssociatedContact() { return associatedContact; }
+
+    public static ObservableList<Customer> addAssociatedCustomer(Customer customer) {
+        ObservableList<Customer> associatedCustomers = FXCollections.observableArrayList();
+        associatedCustomers.add(customer);
+        return associatedCustomers;
+    }
+    public void addAssociatedUser(User user) {
+        associatedUser.add(user);
+    }
+    public void addAssociatedContact(Contact contact) {
+        associatedContact.add(contact);
     }
 }

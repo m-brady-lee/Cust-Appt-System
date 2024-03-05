@@ -102,12 +102,25 @@ public class AppointmentDetailsController implements Initializable {
 
     @FXML
     void onActionDisplayEditApptMenu(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/org/example/view/edit-appointment-view.fxml"));
+            loader.load();
 
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/org/example/view/edit-appointment-view.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+            EditAppointmentController EditApptController = loader.getController();
+            EditApptController.sendAppointment(apptdetailsTableView.getSelectionModel().getSelectedItem());
 
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Parent scene = loader.getRoot();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+        catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Please select an Appointment to edit.");
+            alert.showAndWait();
+        }
     }
 
     @FXML

@@ -70,25 +70,12 @@ public class AddCustomerController implements Initializable {
     @FXML
     void onActionSaveNewCustToCustDetails(ActionEvent event) throws IOException, SQLException {
 
-        int id = Customer.customerCounter;
-
         String name = addcustomerNameText.getText();
         /** LOGICAL ERROR: This error is generated if the name field is blank or contains any number values. */
         if (name.isBlank() || name.matches(".*\\d.*")) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("Please enter a valid value for Name");
-            alert.showAndWait();
-            return;
-        }
-
-        /** LOGICAL ERROR: This error is generated if the country combo box field is not selected. */
-        try {
-            String country = addcustomerCountryDropdown.getValue().toString();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error Dialog");
-            alert.setContentText("Country must be selected");
             alert.showAndWait();
             return;
         }
@@ -140,7 +127,6 @@ public class AddCustomerController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
         CustomerQuery.addCustomer(name, address, postalCode, phoneNumber, divisionID);
-            Customer.customerCounter += 1;
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/org/example/view/customer-details-view.fxml"));

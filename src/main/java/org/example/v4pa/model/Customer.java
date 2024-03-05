@@ -4,22 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Customer {
-    public static int customerCounter = 1;
     public int customerID;
     private String customerName;
     private String customerAddress;
     private String customerPostalCode;
     private String customerPhone;
     private int customerDivisionID;
-
-    public int getCustomerCountryID() {
-        return customerCountryID;
-    }
-
-    public void setCustomerCountryID(int customerCountryID) {
-        this.customerCountryID = customerCountryID;
-    }
-
     private int customerCountryID;
 
 
@@ -31,10 +21,6 @@ public class Customer {
         this.customerPhone = customerPhone;
         this.customerDivisionID = customerDivisionID;
         this.customerCountryID = customerCountryID;
-    }
-
-    public static void setCustomerCounter(int customerCounter) {
-        Customer.customerCounter = customerCounter;
     }
 
     public int getCustomerID() {
@@ -77,12 +63,24 @@ public class Customer {
         this.customerPhone = customerPhone;
     }
 
-
     public int getCustomerDivisionID() {
         return customerDivisionID;
     }
 
     public void setCustomerDivisionID(int customerDivisionID) {
         this.customerDivisionID = customerDivisionID;
+    }
+
+    public int getCustomerCountryID() {
+        return customerCountryID;
+    }
+
+    public void setCustomerCountryID(int customerCountryID) {
+        this.customerCountryID = customerCountryID;
+    }
+
+    @Override
+    public String toString() {
+        return (customerName);
     }
 }
