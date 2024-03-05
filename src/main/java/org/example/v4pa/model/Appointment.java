@@ -37,6 +37,7 @@ public class Appointment {
         this.apptCustomerID = apptCustomerID;
         this.apptUserID = apptUserID;
         this.apptContactID = apptContactID;
+
     }
 
     public int getApptID() {

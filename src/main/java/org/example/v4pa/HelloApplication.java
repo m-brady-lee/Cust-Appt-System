@@ -30,15 +30,12 @@ public class HelloApplication extends Application {
         int rowsAffected = FruitsQuery.delete(4);
         if (rowsAffected > 0) {
             System.out.println("Delete successful!");
-        }
-        else {
+        } else {
             System.out.println("Delete failure");
         }
-        FruitsQuery.update (6, "Goulash");
+        FruitsQuery.update(6, "Goulash");
         FruitsQuery.select(2);
 
         JDBC.closeConnection();
-
-
     }
 }
