@@ -160,6 +160,8 @@ public class AppointmentDetailsController implements Initializable {
         apptdetailsLocationColumn.setCellValueFactory(new PropertyValueFactory<>("apptLocation"));
         apptdetailsContactColumn.setCellValueFactory(new PropertyValueFactory<>("apptContactID"));
         apptdetailsTypeColumn.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        apptdetailsStartDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("apptStart"));
+        apptdetailsEndDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("apptEnd"));
         apptdetailsCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
         apptdetailsUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptUserID"));
     }

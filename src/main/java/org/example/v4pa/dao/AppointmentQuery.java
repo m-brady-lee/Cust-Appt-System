@@ -8,6 +8,8 @@ import org.example.v4pa.model.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public abstract class AppointmentQuery {
 
@@ -23,11 +25,16 @@ public abstract class AppointmentQuery {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                // Need to add in Start and End times
+//                LocalDateTime apptStart = rs.getTimestamp("Start").toLocalDateTime();
+                Timestamp t = rs.getTimestamp("Start");
+                LocalDateTime apptStart = t.toLocalDateTime();
+                Timestamp ts = rs.getTimestamp("End");
+                LocalDateTime apptEnd = ts.toLocalDateTime();
+//                LocalDateTime apptEnd = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-                Appointment a = new Appointment(apptID, title, description, location, type, customerID, userID, contactID);
+                Appointment a = new Appointment(apptID, title, description, location, type, apptStart, apptEnd, customerID, userID, contactID);
                 appointmentList.add(a);
             }
         } catch (SQLException e) {
@@ -36,33 +43,33 @@ public abstract class AppointmentQuery {
         return appointmentList;
     }
 
-    public static int addAppointment(String apptTitle, String apptDescription, String apptLocation, String apptType, int custID, int userID, int contactID) throws SQLException {
-        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public static int addAppointment(String apptTitle, String apptDescription, String apptLocation, String apptType, LocalDateTime apptStart, LocalDateTime apptEnd, int custID, int userID, int contactID) throws SQLException {
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, apptTitle);
         ps.setString(2, apptDescription);
         ps.setString(3, apptLocation);
         ps.setString(4, apptType);
-//        ps.setInt(5, apptStart);
-//        ps.setInt(6, apptEnd);
-        ps.setInt(5, custID);
-        ps.setInt(6, userID);
-        ps.setInt(7, contactID);
+        ps.setTimestamp(5, Timestamp.valueOf(apptStart));
+        ps.setTimestamp(6, Timestamp.valueOf(apptEnd));
+        ps.setInt(7, custID);
+        ps.setInt(8, userID);
+        ps.setInt(9, contactID);
 
         int rowsAffected = ps.executeUpdate();
 
         return rowsAffected;
     }
 
-    public static int updateAppointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, int custID, int userID, int contactID) throws SQLException {
-        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+    public static int updateAppointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, LocalDateTime apptStart, LocalDateTime apptEnd, int custID, int userID, int contactID) throws SQLException {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, apptTitle);
         ps.setString(2, apptDescription);
         ps.setString(3, apptLocation);
         ps.setString(4, apptType);
-//        ps.setInt(5, apptStart);
-//        ps.setInt(6, apptEnd);
+        ps.setTimestamp(5, Timestamp.valueOf(apptStart));
+        ps.setTimestamp(6, Timestamp.valueOf(apptEnd));
         ps.setInt(5, custID);
         ps.setInt(6, userID);
         ps.setInt(7, contactID);
@@ -95,12 +102,12 @@ public abstract class AppointmentQuery {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-//                startDateTime
-//                endDateTime
+                LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-                Appointment a = new Appointment(customerID, title, description, location, type, customerID, userID, contactID);
+                Appointment a = new Appointment(customerID, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
                 appointmentList.add(a);
             }
         } catch (SQLException e) {

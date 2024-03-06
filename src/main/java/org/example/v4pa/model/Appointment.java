@@ -3,37 +3,30 @@ package org.example.v4pa.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDateTime;
+import java.util.Locale;
+
 public class Appointment {
-
-    public static int apptCounter = 1;
-
     private int apptID;
     private String apptTitle;
     private String apptDescription;
     private String apptLocation;
     private String apptType;
-    private int apptStart;
-    private int apptEnd;
+    private LocalDateTime apptStart;
+    private LocalDateTime apptEnd;
     private int apptCustomerID;
     private int apptUserID;
     private int apptContactID;
 
-    private static ObservableList<Contact> associatedContact = FXCollections.observableArrayList();
-    private static ObservableList<Customer> associatedCustomer = FXCollections.observableArrayList();
-    private static ObservableList<User> associatedUser = FXCollections.observableArrayList();
 
-    public Appointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, int apptCustomerID, int apptUserID, int apptContactID) {
+    public Appointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, LocalDateTime apptStart, LocalDateTime apptEnd, int apptCustomerID, int apptUserID, int apptContactID) {
         this.apptID = apptID;
         this.apptTitle = apptTitle;
         this.apptDescription = apptDescription;
         this.apptLocation = apptLocation;
         this.apptType = apptType;
-//        this.apptStart = apptStart;
-//        this.apptEnd = apptEnd;
-//        this.apptCreateDate = apptCreateDate;
-//        this.apptCreatedBy = apptCreatedBy;
-//        this.apptUpdateDate = apptUpdateDate;
-//        this.apptLastUpdatedBy = apptLastUpdatedBy;
+        this.apptStart = apptStart;
+        this.apptEnd = apptEnd;
         this.apptCustomerID = apptCustomerID;
         this.apptUserID = apptUserID;
         this.apptContactID = apptContactID;
@@ -80,19 +73,19 @@ public class Appointment {
         this.apptType = apptType;
     }
 
-    public int getApptStart() {
+    public LocalDateTime getApptStart() {
         return apptStart;
     }
 
-    public void setApptStart(int apptStart) {
+    public void setApptStart(LocalDateTime apptStart) {
         this.apptStart = apptStart;
     }
 
-    public int getApptEnd() {
+    public LocalDateTime getApptEnd() {
         return apptEnd;
     }
 
-    public void setApptEnd(int apptEnd) {
+    public void setApptEnd(LocalDateTime apptEnd) {
         this.apptEnd = apptEnd;
     }
 
@@ -120,19 +113,4 @@ public class Appointment {
         this.apptContactID = apptContactID;
     }
 
-    public ObservableList<Customer> getAssociatedCustomer() { return associatedCustomer; }
-    public ObservableList<User> getAssociatedUser() { return associatedUser; }
-    public ObservableList<Contact> getAssociatedContact() { return associatedContact; }
-
-    public static ObservableList<Customer> addAssociatedCustomer(Customer customer) {
-        ObservableList<Customer> associatedCustomers = FXCollections.observableArrayList();
-        associatedCustomers.add(customer);
-        return associatedCustomers;
-    }
-    public void addAssociatedUser(User user) {
-        associatedUser.add(user);
-    }
-    public void addAssociatedContact(Contact contact) {
-        associatedContact.add(contact);
-    }
 }

@@ -19,6 +19,9 @@ import org.example.v4pa.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -141,6 +144,30 @@ public class EditAppointmentController implements Initializable {
             return;
         }
 
+        LocalDate startDate = editapptStartDatePicker.getValue();
+        LocalTime startTime = LocalTime.parse(editapptStartTimeText.getText());
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+        /** LOGICAL ERROR: This error is generated if the 'Start Date' date picker and Start Time fields do not contain values. */
+        if (startDateTime != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Date and Time are required");
+            alert.showAndWait();
+            return;
+        }
+
+        LocalDate endDate = editapptEndDatePicker.getValue();
+        LocalTime endTime = LocalTime.parse(editapptEndTimeText.getText());
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
+        /** LOGICAL ERROR: This error is generated if the 'End Date' date picker and End Time fields do not contain values. */
+        if (endDateTime != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Date and Time are required");
+            alert.showAndWait();
+            return;
+        }
+
         int customerID = 10111;
         /** RUNTIME ERROR: This error is generated if the Customer combo box does not contain a value. */
         try {
@@ -184,23 +211,13 @@ public class EditAppointmentController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
-            associatedCustomer.add(CustomerQuery.findCustomerName(customerID));
-            associatedUser.add(UserQuery.findUserName(userID));
-            associatedContact.add(ContactQuery.findContactName(contactID));
-//            Appointment appointment = new Appointment(this.appointment.getApptID(), title, description, location, type, customerID, userID, contactID);
-//            appointment.addAssociatedCustomer(CustomerQuery.selectCustomer(customerID));
-//            appointment.addAssociatedUser(UserQuery.selectUser(userID));
-//            appointment.addAssociatedContact(ContactQuery.selectContact(contactID));
-
-            AppointmentQuery.updateAppointment(id, title, description, location, type, customerID, userID, contactID);
-            // Make a query that can update an appointment with attached objects
+            AppointmentQuery.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
         }
-
     }
 
     @Override

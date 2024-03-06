@@ -18,6 +18,9 @@ import org.example.v4pa.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -100,7 +103,7 @@ public class AddAppointmentController implements Initializable {
 
         String location = addapptLocationText.getText();
         /** LOGICAL ERROR: This error is generated if the Location field is blank. */
-        if (title.isBlank()) {
+        if (location.isBlank()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("Location is required");
@@ -116,6 +119,30 @@ public class AddAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("Type is required");
+            alert.showAndWait();
+            return;
+        }
+
+        LocalDate startDate = addapptStartDatePicker.getValue();
+        LocalTime startTime = LocalTime.parse(addapptStartTimeText.getText());
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+        /** LOGICAL ERROR: This error is generated if the 'Start Date' date picker and Start Time fields do not contain values. */
+        if (startDateTime != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Date and Time are required");
+            alert.showAndWait();
+            return;
+        }
+
+        LocalDate endDate = addapptEndDatePicker.getValue();
+        LocalTime endTime = LocalTime.parse(addapptEndTimeText.getText());
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
+        /** LOGICAL ERROR: This error is generated if the 'End Date' date picker and End Time fields do not contain values. */
+        if (endDateTime != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Date and Time are required");
             alert.showAndWait();
             return;
         }
@@ -167,7 +194,7 @@ public class AddAppointmentController implements Initializable {
             associatedUser.add(UserQuery.findUserName(userID));
             associatedContact.add(ContactQuery.findContactName(contactID));
 
-            AppointmentQuery.addAppointment(title, description, location, type, customerID, userID, contactID);
+            AppointmentQuery.addAppointment(title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
