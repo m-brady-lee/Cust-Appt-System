@@ -163,13 +163,30 @@ public class AppointmentDetailsController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the selected appointment. Are you sure you want to continue?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                String appointmentName = String.valueOf(apptdetailsTableView.getSelectionModel().getSelectedItem().getApptTitle());
                 AppointmentQuery.deleteAppointment(apptdetailsTableView.getSelectionModel().getSelectedItem().getApptID());
+                if(apptdetailsByWeekRadioButton.isSelected()) {
+                    apptdetailsTableView.setItems(AppointmentFinder.findWeeklyAppointments(currentDateTime));
+                    Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
+                    alertDelete.setTitle("Confirmation");
+                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.showAndWait();
+                } else if (apptdetailsByMonthRadioButton.isSelected()) {
+                    apptdetailsTableView.setItems(AppointmentFinder.findMonthlyAppointments(currentDateTime));
+                    Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
+                    alertDelete.setTitle("Confirmation");
+                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.showAndWait();
+                } else {
+                    ObservableList<Appointment> appointmentsList = AppointmentQuery.getAllAppointments();
+                    apptdetailsTableView.setItems(appointmentsList);
+                    Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
+                    alertDelete.setTitle("Confirmation");
+                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.showAndWait();
+                }
             }
-            if(apptdetailsByWeekRadioButton.isSelected()) {
-                apptdetailsTableView.setItems(AppointmentFinder.findWeeklyAppointments(currentDateTime));
-            } else if (apptdetailsByMonthRadioButton.isSelected()) {
-                apptdetailsTableView.setItems(AppointmentFinder.findMonthlyAppointments(currentDateTime));
-            }
+
 
         } catch (NullPointerException e) {
         } catch (SQLException e) {

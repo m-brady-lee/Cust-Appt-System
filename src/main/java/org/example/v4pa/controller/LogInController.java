@@ -33,10 +33,6 @@ public class LogInController implements Initializable {
     private Button loginSubmitButton;
     @FXML
     private TextField loginUsernameText;
-    @FXML
-    private ChoiceBox<String> loginTimeZoneChoiceBox;
-    private String[] timeZones = {"MST", "EST", "GMT"};
-
 
 
     LocalDate londonDate = LocalDate.of(2024, 03, 20);
@@ -79,25 +75,9 @@ public class LogInController implements Initializable {
         }
     }
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loginTimeZoneChoiceBox.getItems().addAll(timeZones);
-        loginTimeZoneChoiceBox.setOnAction(this::setTimeZone);
         loginUserLocationLabel.setText(String.valueOf(localZoneID));
     }
 
-    public void setTimeZone(ActionEvent event) {
-        String timeZoneChoice = loginTimeZoneChoiceBox.getValue();
-        if(timeZoneChoice == "MST") {
-            // Set UTC -7
-        }
-        if(timeZoneChoice == "EST") {
-            // Set UTC -5
-        }
-        if(timeZoneChoice == "GMT") {
-            // Set UTC +0
-        }
-    }
 }
