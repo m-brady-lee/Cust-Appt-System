@@ -2,12 +2,14 @@ package org.example.v4pa.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Customer;
 import org.example.v4pa.model.FirstLevelDivision;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.PropertyPermission;
 
 public abstract class CustomerQuery {
@@ -72,27 +74,6 @@ public abstract class CustomerQuery {
 
         return rowsAffected;
     }
-
-    public static Customer findCustomerID(String customerName) {
-        ObservableList<Customer> customerList = getAllCustomers();
-        for(Customer testCustomer : customerList) {
-            if (testCustomer.getCustomerName().contains(customerName)) {
-                return testCustomer;
-            }
-        }
-        return null;
-    }
-
-    public static Customer findCustomerName(int customerID) {
-        ObservableList<Customer> customerList = getAllCustomers();
-        for(Customer testCustomer : customerList) {
-            if (testCustomer.getCustomerID() == (customerID)) {
-                return testCustomer;
-            }
-        }
-        return null;
-    }
-
 
     public static ObservableList<Customer> selectCustomer(int customerID) throws SQLException {
         ObservableList<Customer> customerList = FXCollections.observableArrayList();

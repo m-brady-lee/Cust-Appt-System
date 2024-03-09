@@ -11,6 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.*;
+import org.example.v4pa.helper.AppointmentFinder;
+import org.example.v4pa.helper.CustomerFinder;
+import org.example.v4pa.helper.GeneralInterface;
+import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Contact;
 import org.example.v4pa.model.Customer;
 import org.example.v4pa.model.User;
@@ -18,6 +22,7 @@ import org.example.v4pa.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -59,9 +64,10 @@ public class AddAppointmentController implements Initializable {
     private ComboBox<User> addapptUserComboBox;
     private String [] addapptMeetingTypes = {"Announcement", "Brainstorm Session", "Customer Engagement", "Review"};
 
-    ObservableList<Contact> associatedContact = FXCollections.observableArrayList();
-    ObservableList<Customer> associatedCustomer = FXCollections.observableArrayList();
-    ObservableList<User> associatedUser = FXCollections.observableArrayList();
+    LocalTime currentTime = LocalTime.now();
+    LocalDate currentDate = LocalDate.now();
+
+    LocalDateTime currentDateTime = LocalDateTime.of(currentDate, currentTime);
 
     @FXML
     void onActionCancelAddApptToApptDetails(ActionEvent event) throws IOException {
@@ -124,10 +130,30 @@ public class AddAppointmentController implements Initializable {
         }
 
         LocalDate startDate = addapptStartDatePicker.getValue();
-        LocalTime startTime = LocalTime.parse(addapptStartTimeText.getText());
+        /** LOGICAL ERROR: This error is generated if the Start Date is before the current date. */
+        if(startDate.isBefore(currentDate)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Date cannot be before today");
+            alert.showAndWait();
+            return;
+        }
+
+        LocalTime startTime = currentTime;
+        /** RUNTIME ERROR: This error is generated if the Start Time is less than 00:00 or greater than 24:00. */
+        try {
+            startTime = LocalTime.parse(addapptStartTimeText.getText());
+        } catch (DateTimeException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Time must be between 00:00 and 24:00 ");
+            alert.showAndWait();
+            return;
+        }
+
         LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
         /** LOGICAL ERROR: This error is generated if the 'Start Date' date picker and Start Time fields do not contain values. */
-        if (startDateTime != null) {
+        if (startDateTime == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("Start Date and Time are required");
@@ -136,13 +162,33 @@ public class AddAppointmentController implements Initializable {
         }
 
         LocalDate endDate = addapptEndDatePicker.getValue();
-        LocalTime endTime = LocalTime.parse(addapptEndTimeText.getText());
+        LocalTime endTime = currentTime;
+        /** RUNTIME ERROR: This error is generated if the End Time is less than 00:00 or greater than 24:00. */
+        try {
+            endTime = LocalTime.parse(addapptEndTimeText.getText());
+        } catch (DateTimeException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Time must be between 00:00 and 24:00 ");
+            alert.showAndWait();
+            return;
+        }
+
         LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
         /** LOGICAL ERROR: This error is generated if the 'End Date' date picker and End Time fields do not contain values. */
-        if (endDateTime != null) {
+        if (endDateTime == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("End Date and Time are required");
+            alert.showAndWait();
+            return;
+        }
+
+        /** LOGICAL ERROR: This error is generated if the End Date and Time are before the Start Date and Time. */
+        if(endDateTime.isBefore(startDateTime) || endDateTime.isEqual(startDateTime)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Date and Time must be after Start Date and Time");
             alert.showAndWait();
             return;
         }
@@ -151,7 +197,7 @@ public class AddAppointmentController implements Initializable {
         /** RUNTIME ERROR: This error is generated if the Customer combo box does not contain a value. */
         try {
             String customer = addapptCustComboBox.getValue().toString();
-            customerID = CustomerQuery.findCustomerID(customer).getCustomerID();
+            customerID = CustomerFinder.findCustomerID(customer).getCustomerID();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
@@ -186,20 +232,49 @@ public class AddAppointmentController implements Initializable {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new appointment?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        /** LOGICAL ERROR: This error is generated if the customer has an appointment during the starting or ending of the proposed appointment. */
+        ObservableList<Appointment> customerAppts = AppointmentFinder.findAppointmentsByCustomer(customerID);
+        ObservableList<Appointment> conflictingAppts = FXCollections.observableArrayList();
+        String testName = "";
+        int testID = 0;
+        LocalDateTime testStart = currentDateTime;
+        LocalDateTime testEnd = currentDateTime;
+        for(Appointment testAppt : customerAppts) {
+            if(
+                    (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
+                            (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                            (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
+                conflictingAppts.add(testAppt);
+                testName = addapptCustComboBox.getValue().toString();
+                testID = testAppt.getApptID();
+                testStart = testAppt.getApptStart();
+                testEnd = testAppt.getApptEnd();
 
-            associatedCustomer.add(CustomerQuery.findCustomerName(customerID));
-            associatedUser.add(UserQuery.findUserName(userID));
-            associatedContact.add(ContactQuery.findContactName(contactID));
+            }
+        }
+        if(conflictingAppts.size() > 0) {
+            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+            alert2.setTitle("Scheduling conflict!");
+            alert2.setContentText(
+                    testName + " has an appointment scheduled during this time:\n" +
+                    "\tAppt. ID: " + testID + "\n" +
+                    "\t Start:  " + testStart + "\n" +
+                    "\t End:  " + testEnd + "\n" +
+                    "\tPlease choose another start and end time");
+            alert2.showAndWait();
+            return;
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new appointment?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                AppointmentQuery.addAppointment(title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
-            AppointmentQuery.addAppointment(title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
-
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
         }
     }
 

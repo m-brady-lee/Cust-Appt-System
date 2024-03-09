@@ -6,20 +6,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import org.example.v4pa.dao.UserQuery;
 import org.example.v4pa.model.User;
 
+import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class LogInController implements Initializable {
 
@@ -27,18 +26,26 @@ public class LogInController implements Initializable {
     Parent scene;
 
     @FXML
+    private Label loginUserLocationLabel;
+    @FXML
     private TextField loginPasswordText;
-
     @FXML
     private Button loginSubmitButton;
-
     @FXML
     private TextField loginUsernameText;
-
     @FXML
     private ChoiceBox<String> loginTimeZoneChoiceBox;
-
     private String[] timeZones = {"MST", "EST", "GMT"};
+
+
+
+    LocalDate londonDate = LocalDate.of(2024, 03, 20);
+    LocalTime londonTime = LocalTime.of(01, 00);
+    ZoneId londonZoneID = ZoneId.of("Europe/London");
+    ZonedDateTime londonZDT = ZonedDateTime.of(londonDate, londonTime, londonZoneID);
+    ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
+    Instant londonToGMTInstant = londonZDT.toInstant();
+    ZonedDateTime gmtToLocalZDT = londonToGMTInstant.atZone(localZoneID);
 
     @FXML
     void onActionDisplayApptDetailsFromLogIn(ActionEvent event) throws IOException {
@@ -51,13 +58,24 @@ public class LogInController implements Initializable {
             alert.setTitle("Error Dialog");
             alert.setContentText("Please enter a valid Username and Password");
             alert.showAndWait();
-            return;
         }
         else {
-            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
+                loader.load();
+
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                Parent scene = loader.getRoot();
+                stage.setScene(new Scene(scene));
+                stage.show();
+
+                AppointmentDetailsController ApptDetailsController = loader.getController();
+                User user = UserQuery.findUserID(username);
+                ApptDetailsController.sendUserInfo(user);
+            }
+            catch (NullPointerException e) {
+            }
         }
     }
 
@@ -67,6 +85,7 @@ public class LogInController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loginTimeZoneChoiceBox.getItems().addAll(timeZones);
         loginTimeZoneChoiceBox.setOnAction(this::setTimeZone);
+        loginUserLocationLabel.setText(String.valueOf(localZoneID));
     }
 
     public void setTimeZone(ActionEvent event) {

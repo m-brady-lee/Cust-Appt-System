@@ -36,11 +36,12 @@
                            <font>
                               <Font size="20.0" />
                            </font></Label>
-                        <GridPane prefHeight="24.0" prefWidth="307.0">
+                        <GridPane prefHeight="40.0" prefWidth="377.0">
                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="78.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="138.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="221.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="26.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="88.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="95.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="170.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -51,6 +52,7 @@
                                     <ToggleGroup fx:id="apptToggleGroup" />
                                  </toggleGroup></RadioButton>
                               <RadioButton fx:id="apptdetailsByMonthRadioButton" mnemonicParsing="false" onAction="#onActionDisplayMonthlyAppts" text="By Month" toggleGroup="$apptToggleGroup" GridPane.columnIndex="2" />
+                              <RadioButton fx:id="apptdetailsViewAllRadioButton" mnemonicParsing="false" onAction="#onActionDisplayAllAppts" text="View All" toggleGroup="$apptToggleGroup" GridPane.columnIndex="3" />
                            </children>
                         </GridPane>
                      </children>
@@ -58,13 +60,13 @@
                   <TableView fx:id="apptdetailsTableView" prefHeight="396.0" prefWidth="1046.0">
                     <columns>
                       <TableColumn fx:id="apptdetailsApptIDColumn" prefWidth="55.0" text="Appt ID" />
-                      <TableColumn fx:id="apptdetailsTitleColumn" prefWidth="111.0" text="Title" />
-                        <TableColumn fx:id="apptdetailsDescriptionColumn" prefWidth="238.0" text="Description" />
-                        <TableColumn fx:id="apptdetailsLocationColumn" minWidth="0.0" prefWidth="116.0" text="Location" />
-                        <TableColumn fx:id="apptdetailsContactColumn" prefWidth="103.0" text="Contact" />
-                        <TableColumn fx:id="apptdetailsTypeColumn" prefWidth="103.0" text="Type" />
-                        <TableColumn fx:id="apptdetailsStartDateTimeColumn" prefWidth="103.0" text="Start Date / Time" />
-                        <TableColumn fx:id="apptdetailsEndDateTimeColumn" prefWidth="105.0" text="End Date / Time" />
+                      <TableColumn fx:id="apptdetailsTitleColumn" prefWidth="92.0" text="Title" />
+                        <TableColumn fx:id="apptdetailsDescriptionColumn" prefWidth="213.0" text="Description" />
+                        <TableColumn fx:id="apptdetailsLocationColumn" minWidth="0.0" prefWidth="109.0" text="Location" />
+                        <TableColumn fx:id="apptdetailsContactColumn" prefWidth="64.0" text="Contact" />
+                        <TableColumn fx:id="apptdetailsTypeColumn" prefWidth="111.0" text="Type" />
+                        <TableColumn fx:id="apptdetailsStartDateTimeColumn" prefWidth="145.0" text="Start Date / Time" />
+                        <TableColumn fx:id="apptdetailsEndDateTimeColumn" prefWidth="145.0" text="End Date / Time" />
                         <TableColumn fx:id="apptdetailsCustIDColumn" prefWidth="59.0" text="Cust. ID" />
                         <TableColumn fx:id="apptdetailsUserIDColumn" prefWidth="52.0" text="User ID" />
                     </columns>

@@ -25,12 +25,8 @@ public abstract class AppointmentQuery {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-//                LocalDateTime apptStart = rs.getTimestamp("Start").toLocalDateTime();
-                Timestamp t = rs.getTimestamp("Start");
-                LocalDateTime apptStart = t.toLocalDateTime();
-                Timestamp ts = rs.getTimestamp("End");
-                LocalDateTime apptEnd = ts.toLocalDateTime();
-//                LocalDateTime apptEnd = rs.getTimestamp("End").toLocalDateTime();
+                LocalDateTime apptStart = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime apptEnd = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -70,10 +66,10 @@ public abstract class AppointmentQuery {
         ps.setString(4, apptType);
         ps.setTimestamp(5, Timestamp.valueOf(apptStart));
         ps.setTimestamp(6, Timestamp.valueOf(apptEnd));
-        ps.setInt(5, custID);
-        ps.setInt(6, userID);
-        ps.setInt(7, contactID);
-        ps.setInt(8, apptID);
+        ps.setInt(7, custID);
+        ps.setInt(8, userID);
+        ps.setInt(9, contactID);
+        ps.setInt(10, apptID);
 
         int rowsAffected = ps.executeUpdate();
 

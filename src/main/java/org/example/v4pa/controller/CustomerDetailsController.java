@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.CustomerQuery;
+import org.example.v4pa.helper.CustomerFinder;
+import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Customer;
 
 import java.io.IOException;
@@ -116,7 +118,7 @@ public class CustomerDetailsController implements Initializable {
 
     @FXML
     void onActionDeleteCust(ActionEvent event) {
-        /** LOGICAL ERROR: This error occurs if no part is selected for deletion. */
+        /** LOGICAL ERROR: This error occurs if no customer is selected for deletion. */
         if (custdetailsTableView.getSelectionModel().getSelectedItem() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
@@ -125,12 +127,28 @@ public class CustomerDetailsController implements Initializable {
             return;
         }
         try {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the selected customer. Are you sure you want to continue?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                CustomerQuery.deleteCustomer(custdetailsTableView.getSelectionModel().getSelectedItem().getCustomerID());
+            int customerID = custdetailsTableView.getSelectionModel().getSelectedItem().getCustomerID();
+            ObservableList<Appointment> associatedAppointments = CustomerFinder.findAssociatedAppointments(customerID);
+            if(associatedAppointments.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete the selected customer. Are you sure you want to continue?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    String customerName = String.valueOf(custdetailsTableView.getSelectionModel().getSelectedItem().getCustomerName());
+                    CustomerQuery.deleteCustomer(custdetailsTableView.getSelectionModel().getSelectedItem().getCustomerID());
+                    custdetailsTableView.setItems(CustomerQuery.getAllCustomers());
+                    Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
+                    alertDelete.setTitle("Confirmation");
+                    alertDelete.setContentText(customerName + " has been deleted.");
+                    alertDelete.showAndWait();
+                }
             }
-            custdetailsTableView.setItems(CustomerQuery.getAllCustomers());
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("You must delete all associated appointments before deleting this customer.");
+                alert.showAndWait();
+                return;
+            }
         } catch (NullPointerException e) {
         } catch (SQLException e) {
             throw new RuntimeException(e);

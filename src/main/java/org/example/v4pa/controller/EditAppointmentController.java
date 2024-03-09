@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.*;
+import org.example.v4pa.helper.AppointmentFinder;
+import org.example.v4pa.helper.CustomerFinder;
 import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Contact;
 import org.example.v4pa.model.Customer;
@@ -19,6 +21,7 @@ import org.example.v4pa.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -31,52 +34,36 @@ public class EditAppointmentController implements Initializable {
 
     @FXML
     private TextField editapptApptIDText;
-
     @FXML
     private Button editapptCancelButton;
-
     @FXML
     private ComboBox<Contact> editapptContactComboBox;
-
     @FXML
     private ComboBox<Customer> editapptCustComboBox;
-
     @FXML
     private TextField editapptDescriptionText;
-
     @FXML
     private DatePicker editapptEndDatePicker;
-
     @FXML
     private TextField editapptEndTimeText;
-
     @FXML
     private TextField editapptLocationText;
-
     @FXML
     private Button editapptSaveButton;
-
     @FXML
     private DatePicker editapptStartDatePicker;
-
     @FXML
     private TextField editapptStartTimeText;
-
     @FXML
     private TextField editapptTitleText;
-
     @FXML
     private ComboBox<String> editapptTypeComboBox;
-
     @FXML
     private ComboBox<User> editapptUserComboBox;
-
     private String [] editapptMeetingTypes = {"Announcement", "Brainstorm Session", "Customer Engagement", "Review"};
-
-    Appointment appointment;
-    ObservableList<Contact> associatedContact = FXCollections.observableArrayList();
-    ObservableList<Customer> associatedCustomer = FXCollections.observableArrayList();
-    ObservableList<User> associatedUser = FXCollections.observableArrayList();
+    LocalTime currentTime = LocalTime.now();
+    LocalDate currentDate = LocalDate.now();
+    LocalDateTime currentDateTime = LocalDateTime.of(currentDate,currentTime);
 
     @FXML
     void onActionCancelEditApptToApptDetails(ActionEvent event) throws IOException {
@@ -145,10 +132,30 @@ public class EditAppointmentController implements Initializable {
         }
 
         LocalDate startDate = editapptStartDatePicker.getValue();
-        LocalTime startTime = LocalTime.parse(editapptStartTimeText.getText());
+        /** LOGICAL ERROR: This error is generated if the Start Date is before the current date. */
+        if(startDate.isBefore(currentDate)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Date cannot be before today");
+            alert.showAndWait();
+            return;
+        }
+
+        LocalTime startTime = currentTime;
+        /** RUNTIME ERROR: This error is generated if the Start Time is less than 00:00 or greater than 24:00. */
+        try {
+            startTime = LocalTime.parse(editapptStartTimeText.getText());
+        } catch (DateTimeException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Start Time must be between 00:00 and 24:00 ");
+            alert.showAndWait();
+            return;
+        }
+
         LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
         /** LOGICAL ERROR: This error is generated if the 'Start Date' date picker and Start Time fields do not contain values. */
-        if (startDateTime != null) {
+        if (startDateTime == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("Start Date and Time are required");
@@ -157,13 +164,33 @@ public class EditAppointmentController implements Initializable {
         }
 
         LocalDate endDate = editapptEndDatePicker.getValue();
-        LocalTime endTime = LocalTime.parse(editapptEndTimeText.getText());
+        LocalTime endTime = currentTime;
+        /** RUNTIME ERROR: This error is generated if the End Time is less than 00:00 or greater than 24:00. */
+        try {
+            endTime = LocalTime.parse(editapptEndTimeText.getText());
+        } catch (DateTimeException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Time must be between 00:00 and 24:00 ");
+            alert.showAndWait();
+            return;
+        }
+
         LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
         /** LOGICAL ERROR: This error is generated if the 'End Date' date picker and End Time fields do not contain values. */
-        if (endDateTime != null) {
+        if (endDateTime == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("End Date and Time are required");
+            alert.showAndWait();
+            return;
+        }
+
+        /** LOGICAL ERROR: This error is generated if the End Date and Time are before the Start Date and Time. */
+        if(endDateTime.isBefore(startDateTime) || endDateTime.isEqual(startDateTime)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("End Date and Time must be after Start Date and Time");
             alert.showAndWait();
             return;
         }
@@ -172,7 +199,7 @@ public class EditAppointmentController implements Initializable {
         /** RUNTIME ERROR: This error is generated if the Customer combo box does not contain a value. */
         try {
             String customer = editapptCustComboBox.getValue().toString();
-            customerID = CustomerQuery.findCustomerID(customer).getCustomerID();
+            customerID = CustomerFinder.findCustomerID(customer).getCustomerID();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
@@ -207,16 +234,47 @@ public class EditAppointmentController implements Initializable {
             return;
         }
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the appointment edits?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        /** LOGICAL ERROR: This error is generated if the customer has an appointment during the starting or ending of the proposed appointment. */
+        ObservableList<Appointment> customerAppts = AppointmentFinder.findAppointmentsByCustomer(customerID);
+        ObservableList<Appointment> conflictingAppts = FXCollections.observableArrayList();
+        String testName = "";
+        int testID = 0;
+        LocalDateTime testStart = currentDateTime;
+        LocalDateTime testEnd = currentDateTime;
+        for(Appointment testAppt : customerAppts) {
+            if(
+                    (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
+                            (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                            (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
+                conflictingAppts.add(testAppt);
+                testName = editapptCustComboBox.getValue().toString();
+                testID = testAppt.getApptID();
+                testStart = testAppt.getApptStart();
+                testEnd = testAppt.getApptEnd();
+            }
+        }
+        if(conflictingAppts.size() > 0) {
+            Alert alert2 = new Alert(Alert.AlertType.WARNING);
+            alert2.setTitle("Scheduling conflict!");
+            alert2.setContentText(testName + " has an appointment scheduled during this time:\n" +
+                    "\tAppt. ID: " + testID + "\n" +
+                    "\t Start:  " + testStart + "\n" +
+                    "\t End:  " + testEnd + "\n\n" +
+                    "\tPlease choose another start and end time");
+            alert2.showAndWait();
+            return;
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the appointment edits?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                AppointmentQuery.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
-            AppointmentQuery.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
-
-            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
         }
     }
 
@@ -234,8 +292,12 @@ public class EditAppointmentController implements Initializable {
         editapptDescriptionText.setText(appointment.getApptDescription());
         editapptLocationText.setText(appointment.getApptLocation());
         editapptTypeComboBox.setValue(appointment.getApptType());
+        editapptStartDatePicker.setValue(appointment.getApptStart().toLocalDate());
+        editapptStartTimeText.setText(String.valueOf(appointment.getApptStart().toLocalTime()));
+        editapptEndDatePicker.setValue(appointment.getApptEnd().toLocalDate());
+        editapptEndTimeText.setText(String.valueOf(appointment.getApptEnd().toLocalTime()));
         int customerID = appointment.getApptCustomerID();
-        editapptCustComboBox.setValue(CustomerQuery.findCustomerName(customerID));
+        editapptCustComboBox.setValue(CustomerFinder.findCustomerName(customerID));
         int userID = appointment.getApptUserID();
         editapptUserComboBox.setValue(UserQuery.findUserName(userID));
         int contactID = appointment.getApptContactID();

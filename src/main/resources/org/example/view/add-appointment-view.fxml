@@ -44,14 +44,14 @@
                   <Label text="Contact" GridPane.rowIndex="4" />
                   <Label text="Type" GridPane.rowIndex="5" />
                   <Label text="Start Date" GridPane.rowIndex="6" />
-                  <Label prefHeight="17.0" prefWidth="242.0" text="Start Time (HH : MM)  Military Time" GridPane.rowIndex="7" />
+                  <Label prefHeight="17.0" prefWidth="242.0" text="Start Time (HH : mm)  Military Time" GridPane.rowIndex="7" />
                   <Label text="End Date" GridPane.rowIndex="8" />
-                  <Label prefHeight="17.0" prefWidth="225.0" text="End Time (HH : MM) Military Time" GridPane.rowIndex="9" />
+                  <Label prefHeight="17.0" prefWidth="225.0" text="End Time (HH : mm) Military Time" GridPane.rowIndex="9" />
                   <Label text="Customer" GridPane.rowIndex="10" />
                   <Label text="User" GridPane.rowIndex="11" />
                   <TextField fx:id="addapptApptIDText" disable="true" editable="false" maxWidth="113.0" minWidth="100.0" prefHeight="25.0" prefWidth="113.0" promptText="Assigned on Save" GridPane.columnIndex="1" />
                   <TextField fx:id="addapptTitleText" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="addapptDescriptionText" prefHeight="55.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="addapptDescriptionText" alignment="TOP_LEFT" prefHeight="55.0" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="addapptLocationText" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <DatePicker fx:id="addapptStartDatePicker" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <DatePicker fx:id="addapptEndDatePicker" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
