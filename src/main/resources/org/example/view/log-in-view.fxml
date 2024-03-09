@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="300.0" maxWidth="340.0" minHeight="230.0" minWidth="340.0" prefHeight="230.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.v4pa.controller.LogInController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="33.0" prefWidth="324.0" text="Customer Appointment System" textAlignment="CENTER">
+      <Label fx:id="loginCustApptSystemLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="33.0" prefWidth="324.0" text="Customer Appointment System" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
@@ -21,8 +21,8 @@
          <children>
             <GridPane prefHeight="174.0" prefWidth="300.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="66.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.0" minWidth="10.0" prefWidth="187.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="102.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.0" minWidth="10.0" prefWidth="198.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -30,12 +30,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Username" GridPane.rowIndex="1" />
-                  <Label text="Password" GridPane.rowIndex="2" />
+                  <Label fx:id="loginUsernameLabel" prefHeight="17.0" prefWidth="93.0" text="Username" GridPane.rowIndex="1" />
+                  <Label fx:id="loginPasswordLabel" prefHeight="17.0" prefWidth="96.0" text="Password" GridPane.rowIndex="2" />
                   <TextField fx:id="loginUsernameText" maxWidth="170.0" minWidth="170.0" prefHeight="25.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="loginPasswordText" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label prefHeight="17.0" prefWidth="57.0" text="Location" />
-                  <Label fx:id="loginUserLocationLabel" prefHeight="17.0" prefWidth="138.0" text="User Location" GridPane.columnIndex="1" />
+                  <Label fx:id="loginLocationLabel" prefHeight="17.0" prefWidth="96.0" text="Location" />
+                  <Label fx:id="loginUserLocationField" prefHeight="17.0" prefWidth="138.0" text="User Location" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>

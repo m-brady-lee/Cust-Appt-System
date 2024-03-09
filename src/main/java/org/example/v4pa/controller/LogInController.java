@@ -26,7 +26,15 @@ public class LogInController implements Initializable {
     Parent scene;
 
     @FXML
-    private Label loginUserLocationLabel;
+    private Label loginCustApptSystemLabel;
+    @FXML
+    private Label loginLocationLabel;
+    @FXML
+    private Label loginPasswordLabel;
+    @FXML
+    private Label loginUsernameLabel;
+    @FXML
+    private Label loginUserLocationField;
     @FXML
     private TextField loginPasswordText;
     @FXML
@@ -43,16 +51,18 @@ public class LogInController implements Initializable {
     Instant londonToGMTInstant = londonZDT.toInstant();
     ZonedDateTime gmtToLocalZDT = londonToGMTInstant.atZone(localZoneID);
 
+
     @FXML
     void onActionDisplayApptDetailsFromLogIn(ActionEvent event) throws IOException {
 
         String username = loginUsernameText.getText();
         String password = loginPasswordText.getText();
+        ResourceBundle rb = ResourceBundle.getBundle("/Nat");
 
         if (!(username.equals(UserQuery.findUserID(username).getUserName()) && password.equals(UserQuery.findUserID(username).getUserPassword()))) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
-            alert.setContentText("Please enter a valid Username and Password");
+            alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
         }
         else {
@@ -77,7 +87,21 @@ public class LogInController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loginUserLocationLabel.setText(String.valueOf(localZoneID));
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle("/Nat");
+            loginCustApptSystemLabel.setText(rb.getString("customer_appt_system"));
+            loginLocationLabel.setText(rb.getString("location"));
+            loginUsernameLabel.setText(rb.getString("username"));
+            loginPasswordLabel.setText(rb.getString("password"));
+            loginSubmitButton.setText(rb.getString("submit"));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        loginUserLocationField.setText(String.valueOf(localZoneID));
+
+
+
     }
 
 }

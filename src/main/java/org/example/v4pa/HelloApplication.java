@@ -27,16 +27,7 @@ public class HelloApplication extends Application {
         JDBC.openConnection();
         launch();
 
-        try {
-            ResourceBundle rb = ResourceBundle.getBundle("/Nat");
-            System.out.println(rb.getString("hello_world"));
 
-//            if(Locale.getDefault().getLanguage().equals("de") || Locale.getDefault().getLanguage().equals("es") || Locale.getDefault().getLanguage().equals("fr")) {
-
-//            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
         //Value returning Lambda Expression
 //        GeneralInterface square = n -> n * n;
