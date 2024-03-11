@@ -59,39 +59,9 @@ public class HelloApplication extends Application {
 //        GeneralInterface square = n -> n * n;
 //        System.out.println(square.calculateSquare(number));
 
-        String name = "";
-        int id = 0;
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now();
-
         // Zone ID MST (UTC -7), EST (UTC -5), GMT (UTC +0)
 
-
-        ZoneId.getAvailableZoneIds().stream().filter(c -> c.contains("America")).forEach(System.out::println);
-
-        LocalDate easternDate = LocalDate.of(2024, 03, 20);
-        LocalTime easternTime = LocalTime.of(01, 00);
-        ZoneId easternZoneID = ZoneId.of("America/New_York");
-        ZonedDateTime easternZDT = ZonedDateTime.of(easternDate, easternTime, easternZoneID);
-
-        ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
-        Instant easternToGMTInstant = easternZDT.toInstant();
-        ZonedDateTime easternToLocalZDT = easternZDT.withZoneSameInstant(easternZoneID);
-        ZonedDateTime gmtToLocalZDT = easternToGMTInstant.atZone(localZoneID);
-        LocalDateTime ldt = LocalDateTime.now();
-
-        System.out.println("Local: " + ZonedDateTime.now());
-        System.out.println("Eastern: " + easternZDT);
-        System.out.println("Eastern-> GMT: " + easternToGMTInstant);
-        System.out.println("GMT-> Local: " + gmtToLocalZDT);
-        System.out.println("GMT-> Local Date: " + gmtToLocalZDT.toLocalDate());
-        System.out.println("GMT-> Local Time: " + gmtToLocalZDT.toLocalTime());
-
-        String date = String.valueOf(gmtToLocalZDT.toLocalDate());
-        String time = String.valueOf(gmtToLocalZDT.toLocalTime());
-        String dateTime = date + " " + time;
-//        //For SQL input
-        System.out.println(dateTime);
+//        ZoneId.getAvailableZoneIds().stream().filter(c -> c.contains("America")).forEach(System.out::println);
 
         JDBC.closeConnection();
     }

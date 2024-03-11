@@ -24,8 +24,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class AppointmentDetailsController implements Initializable {
 
@@ -196,7 +199,11 @@ public class AppointmentDetailsController implements Initializable {
     public void sendUserInfo(User user) {
         userID = user.getUserID();
 
-        ObservableList<Appointment> upcomingAppts = AppointmentFinder.findUpcomingAppointments(currentDateTime, userID);
+        ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
+        ZonedDateTime localStartZDT = currentDateTime.atZone(localZoneID);
+        ZonedDateTime easternStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        LocalDateTime easternStartLDT = easternStartZDT.toLocalDateTime();
+        ObservableList<Appointment> upcomingAppts = AppointmentFinder.findUpcomingAppointments(easternStartLDT, userID);
         int numberOfUpcomingAppts = 0;
         numberOfUpcomingAppts = upcomingAppts.size();
         int apptID = 0;
@@ -206,13 +213,16 @@ public class AppointmentDetailsController implements Initializable {
             apptID = testAppointment.getApptID();
             apptStart = testAppointment.getApptStart();
         }
+        easternStartLDT = apptStart;
+        easternStartZDT = easternStartLDT.atZone(ZoneId.of("America/New_York"));
+        localStartZDT = easternStartZDT.withZoneSameInstant(localZoneID);
 
         if(numberOfUpcomingAppts > 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Appointment Notice");
-            alert.setContentText("You have an upcoming appointment! \n" +
-                    "\tAppointment ID: " + apptID + "\n" +
-                    "\tStart Date and Time: " + apptStart + "\n");
+            alert.setContentText("You have an upcoming appointment! \n\n" +
+                    "\tAppointment ID:    " + apptID + "\n" +
+                    "\tStart Date/Time:    " + localStartZDT.toLocalDateTime() + "\n");
             alert.showAndWait();
             return;
         }
