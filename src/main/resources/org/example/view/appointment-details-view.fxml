@@ -60,13 +60,13 @@
                   <TableView fx:id="apptdetailsTableView" prefHeight="396.0" prefWidth="1046.0">
                     <columns>
                       <TableColumn fx:id="apptdetailsApptIDColumn" prefWidth="55.0" text="Appt ID" />
-                      <TableColumn fx:id="apptdetailsTitleColumn" prefWidth="92.0" text="Title" />
-                        <TableColumn fx:id="apptdetailsDescriptionColumn" prefWidth="213.0" text="Description" />
-                        <TableColumn fx:id="apptdetailsLocationColumn" minWidth="0.0" prefWidth="109.0" text="Location" />
-                        <TableColumn fx:id="apptdetailsContactColumn" prefWidth="64.0" text="Contact" />
-                        <TableColumn fx:id="apptdetailsTypeColumn" prefWidth="111.0" text="Type" />
-                        <TableColumn fx:id="apptdetailsStartDateTimeColumn" prefWidth="145.0" text="Start Date / Time" />
-                        <TableColumn fx:id="apptdetailsEndDateTimeColumn" prefWidth="145.0" text="End Date / Time" />
+                      <TableColumn fx:id="apptdetailsTitleColumn" prefWidth="106.0" text="Title" />
+                        <TableColumn fx:id="apptdetailsDescriptionColumn" prefWidth="160.0" text="Description" />
+                        <TableColumn fx:id="apptdetailsLocationColumn" minWidth="0.0" prefWidth="121.0" text="Location" />
+                        <TableColumn fx:id="apptdetailsContactColumn" prefWidth="51.0" text="Contact" />
+                        <TableColumn fx:id="apptdetailsTypeColumn" prefWidth="151.0" text="Type" />
+                        <TableColumn fx:id="apptdetailsStartDateTimeColumn" prefWidth="145.0" text="Start Date / Time (ET)" />
+                        <TableColumn fx:id="apptdetailsEndDateTimeColumn" prefWidth="145.0" text="End Date / Time (ET)" />
                         <TableColumn fx:id="apptdetailsCustIDColumn" prefWidth="59.0" text="Cust. ID" />
                         <TableColumn fx:id="apptdetailsUserIDColumn" prefWidth="52.0" text="User ID" />
                     </columns>

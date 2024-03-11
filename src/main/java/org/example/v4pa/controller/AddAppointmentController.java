@@ -22,12 +22,11 @@ import org.example.v4pa.model.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class AddAppointmentController implements Initializable {
 
@@ -66,8 +65,9 @@ public class AddAppointmentController implements Initializable {
 
     LocalTime currentTime = LocalTime.now();
     LocalDate currentDate = LocalDate.now();
-
     LocalDateTime currentDateTime = LocalDateTime.of(currentDate, currentTime);
+
+
 
     @FXML
     void onActionCancelAddApptToApptDetails(ActionEvent event) throws IOException {
@@ -161,6 +161,23 @@ public class AddAppointmentController implements Initializable {
             return;
         }
 
+        ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
+        ZonedDateTime localStartZDT = startDateTime.atZone(localZoneID);
+        ZonedDateTime easternStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        LocalDateTime easternStartLDT = easternStartZDT.toLocalDateTime();
+        LocalDate cutoffStartDate = easternStartZDT.toLocalDate();
+        LocalDateTime cutoffmorningApptStart = cutoffStartDate.atTime(8, 00);
+        LocalDateTime cutoffeveningApptStart = cutoffStartDate.atTime(22, 0);
+
+        /** LOGICAL ERROR: This error is generated if the user tries to schedule an appointment outside of business hours. */
+        if(easternStartLDT.isBefore(cutoffmorningApptStart) || easternStartLDT.isAfter(cutoffeveningApptStart)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\t\t\t8:00 AM - 10:00 PM ET");
+            alert.showAndWait();
+            return;
+        }
+
         LocalDate endDate = addapptEndDatePicker.getValue();
         LocalTime endTime = currentTime;
         /** RUNTIME ERROR: This error is generated if the End Time is less than 00:00 or greater than 24:00. */
@@ -189,6 +206,29 @@ public class AddAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText("End Date and Time must be after Start Date and Time");
+            alert.showAndWait();
+            return;
+        }
+
+        ZonedDateTime localEndZDT = endDateTime.atZone(localZoneID);
+        ZonedDateTime easternEndZDT = localEndZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        LocalDateTime easternEndLDT = easternEndZDT.toLocalDateTime();
+        LocalDate cutoffEndDate = easternEndZDT.toLocalDate();
+        LocalDateTime cutoffmorningApptEnd = cutoffEndDate.atTime(8, 00);
+        LocalDateTime cutoffeveningApptEnd = cutoffEndDate.atTime(22, 0);
+
+        /** LOGICAL ERROR: These errors are generated if the user tries to schedule an appointment outside of business hours. */
+        if(easternEndLDT.isBefore(cutoffmorningApptEnd) || easternEndLDT.isAfter(cutoffeveningApptEnd)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\t\t\t8:00 AM - 10:00 PM ET");
+            alert.showAndWait();
+            return;
+        }
+        if(!(cutoffStartDate.isEqual(cutoffEndDate))) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Appointments must start and end on the same day");
             alert.showAndWait();
             return;
         }
@@ -268,7 +308,7 @@ public class AddAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new appointment?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                AppointmentQuery.addAppointment(title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
+                AppointmentQuery.addAppointment(title, description, location, type, easternStartLDT, easternEndLDT, customerID, userID, contactID);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));

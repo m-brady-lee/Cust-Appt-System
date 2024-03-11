@@ -187,7 +187,6 @@ public class AppointmentDetailsController implements Initializable {
                 }
             }
 
-
         } catch (NullPointerException e) {
         } catch (SQLException e) {
             throw new RuntimeException(e);
