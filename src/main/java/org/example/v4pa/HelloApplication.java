@@ -7,10 +7,14 @@ import javafx.stage.Stage;
 import org.example.v4pa.dao.JDBC;
 import org.example.v4pa.helper.GeneralInterface;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.*;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.TimeZone;
 
 public class HelloApplication extends Application {
@@ -23,11 +27,10 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, FileNotFoundException {
         JDBC.openConnection();
+
         launch();
-
-
 
         //Value returning Lambda Expression
 //        GeneralInterface square = n -> n * n;

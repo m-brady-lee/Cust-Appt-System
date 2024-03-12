@@ -138,12 +138,12 @@
       <TableView fx:id="reportsTableView" layoutX="38.0" layoutY="292.0" prefHeight="222.0" prefWidth="832.0">
         <columns>
           <TableColumn fx:id="reportsApptIDColumn" prefWidth="57.0" text="Appt. ID" />
-          <TableColumn fx:id="reportsTitleColumn" prefWidth="124.0" text="Title" />
-            <TableColumn fx:id="reportsTypeColumn" prefWidth="83.0" text="Type" />
-            <TableColumn fx:id="reportsDescriptionColumn" prefWidth="223.0" text="Description" />
-            <TableColumn fx:id="reportsStartDateColumn" prefWidth="134.0" text="Start Date / Time" />
-            <TableColumn fx:id="reportsEndDateColumn" prefWidth="123.0" text="End Date / Time" />
-            <TableColumn fx:id="reportsCustomerIDColumn" prefWidth="87.0" text="Customer ID" />
+          <TableColumn fx:id="reportsTitleColumn" prefWidth="128.0" text="Title" />
+            <TableColumn fx:id="reportsTypeColumn" prefWidth="147.0" text="Type" />
+            <TableColumn fx:id="reportsDescriptionColumn" prefWidth="160.0" text="Description" />
+            <TableColumn fx:id="reportsStartDateColumn" prefWidth="155.0" text="Start Date / Time (ET)" />
+            <TableColumn fx:id="reportsEndDateColumn" prefWidth="133.0" text="End Date / Time (ET)" />
+            <TableColumn fx:id="reportsCustomerIDColumn" prefWidth="51.0" text="Cust. ID" />
         </columns>
       </TableView>
    </children>

@@ -1,5 +1,7 @@
 package org.example.v4pa.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,13 +14,12 @@ import javafx.scene.input.KeyEvent;
 import org.example.v4pa.dao.UserQuery;
 import org.example.v4pa.model.User;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.time.*;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class LogInController implements Initializable {
 
@@ -42,30 +43,85 @@ public class LogInController implements Initializable {
     @FXML
     private TextField loginUsernameText;
 
-
-    LocalDate londonDate = LocalDate.of(2024, 03, 20);
-    LocalTime londonTime = LocalTime.of(01, 00);
-    ZoneId londonZoneID = ZoneId.of("Europe/London");
-    ZonedDateTime londonZDT = ZonedDateTime.of(londonDate, londonTime, londonZoneID);
     ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
-    Instant londonToGMTInstant = londonZDT.toInstant();
-    ZonedDateTime gmtToLocalZDT = londonToGMTInstant.atZone(localZoneID);
-
+    LocalDate currentDate = LocalDate.now();
+    LocalTime currentTime = LocalTime.now();
+    LocalDateTime currentDateTime = LocalDateTime.of(currentDate, currentTime);
+    ZonedDateTime localStartZDT = currentDateTime.atZone(localZoneID);
+    ZonedDateTime easternStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+    LocalDateTime easternStartLDT = easternStartZDT.toLocalDateTime();
+    LocalDate easternLD = easternStartLDT.toLocalDate();
+    LocalTime easternLT = easternStartLDT.toLocalTime();
 
     @FXML
     void onActionDisplayApptDetailsFromLogIn(ActionEvent event) throws IOException {
 
-        String username = loginUsernameText.getText();
-        String password = loginPasswordText.getText();
+        String username = "";
+        String password = "";
         ResourceBundle rb = ResourceBundle.getBundle("/Nat");
 
-        if (!(username.equals(UserQuery.findUserID(username).getUserName()) && password.equals(UserQuery.findUserID(username).getUserPassword()))) {
+        //Login attempts, dates and timestamps
+
+        //Filename and item variables
+        String filename = "src/main/java/org/example/v4pa/files/login_activity.txt";
+//
+//        //Create FileWriter object
+        FileWriter fwriter = new FileWriter(filename, true);
+//        //Create and Open file
+        PrintWriter outputFile = new PrintWriter(fwriter);
+//
+//        System.out.println("File written and closed");
+        try {
+            username = loginUsernameText.getText();
+            password = loginPasswordText.getText();
+        } catch (NullPointerException e) {
+        }
+
+        if (UserQuery.findUserID(username) == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
             alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
+            outputFile.println("Login Attempt Failure-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
+            //Close file
+            outputFile.close();
+            return;
+        } else if (!(UserQuery.findUserID(username) == null) && (UserQuery.findUserPassword(username) == null)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText(rb.getString("valid_user_pw"));
+            alert.showAndWait();
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            outputFile.println("Login Attempt Failure-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
+            //Close file
+            outputFile.close();
+            return;
+        } else if (UserQuery.findUserNameWithPassword(password) == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText(rb.getString("valid_user_pw"));
+            alert.showAndWait();
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            outputFile.println("Login Attempt Failure-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
+            //Close file
+            outputFile.close();
+            return;
+        } else if (!(UserQuery.findUserNameWithPassword(password) == null) && (UserQuery.findUserID(username) == null)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error Dialog");
+            alert.setContentText(rb.getString("valid_user_pw"));
+            alert.showAndWait();
+            LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            outputFile.println("Login Attempt Failure-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
+            //Close file
+            outputFile.close();
+            return;
         }
-        else {
+//
+        if (((username.equals(UserQuery.findUserID(username).getUserName())) && (password.equals(UserQuery.findUserID(username).getUserPassword())))) {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
@@ -79,8 +135,13 @@ public class LogInController implements Initializable {
                 AppointmentDetailsController ApptDetailsController = loader.getController();
                 User user = UserQuery.findUserID(username);
                 ApptDetailsController.sendUserInfo(user);
-            }
-            catch (NullPointerException e) {
+
+                LocalDate currentDate = LocalDate.now();
+                LocalTime currentTime = LocalTime.now();
+                outputFile.println("Login Attempt Success-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
+                //Close file
+                outputFile.close();
+            } catch (NullPointerException e) {
             }
         }
     }
@@ -101,7 +162,5 @@ public class LogInController implements Initializable {
         loginUserLocationField.setText(String.valueOf(localZoneID));
 
 
-
     }
-
 }

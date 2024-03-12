@@ -33,8 +33,30 @@ public abstract class UserQuery {
     public static User findUserID(String userName) {
         ObservableList<User> userList = getAllUsers();
         for(User testUser : userList) {
-            if (testUser.getUserName().contains(userName)) {
+            if (testUser.getUserName().equals(userName)) {
                 return testUser;
+            }
+        }
+        return null;
+    }
+
+    public static String findUserPassword(String userName) {
+        ObservableList<User> userList = getAllUsers();
+        for(User testUser : userList) {
+            if (testUser.getUserName().equals(userName)) {
+                String password = testUser.getUserPassword();
+                return password;
+            }
+        }
+        return null;
+    }
+
+    public static String findUserNameWithPassword(String password) {
+        ObservableList<User> userList = getAllUsers();
+        for(User testUser : userList) {
+            if(testUser.getUserPassword().equals(password)) {
+                String userName = testUser.getUserName();
+                return userName;
             }
         }
         return null;

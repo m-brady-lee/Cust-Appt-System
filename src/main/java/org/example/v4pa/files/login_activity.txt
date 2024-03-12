@@ -1,0 +1,14 @@
+LOGIN ACTIVITY
+
+Login Attempt Success- Username: test	Password: test	Date: 2024-03-11	Timestamp: 22:53:13.618584
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-11	Timestamp: 22:55:33.234984
+Login Attempt Failure-	Username: tatsa	Password: atsd	Date: 2024-03-11	Timestamp: 23:54:54.490703
+Login Attempt Failure-	Username: test	Password: atsd	Date: 2024-03-11	Timestamp: 23:55:07.106791
+Login Attempt Failure-	Username: test	Password: atstadstd	Date: 2024-03-11	Timestamp: 23:55:16.837947
+Login Attempt Failure-	Username: teasfdst	Password: test	Date: 2024-03-11	Timestamp: 23:55:40.067155
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-11	Timestamp: 23:56:22.225860
+Login Attempt Failure-	Username: tset	Password: asfd	Date: 2024-03-11	Timestamp: 23:58:17.968555
+Login Attempt Failure-	Username: test	Password: asfd	Date: 2024-03-11	Timestamp: 23:58:22.813133
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-11	Timestamp: 23:58:26.929867
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-12	Timestamp: 02:04:52.691135
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-12	Timestamp(ET): 02:06:36.798260
