@@ -15,7 +15,6 @@ import org.example.v4pa.dao.AppointmentQuery;
 import org.example.v4pa.dao.ContactQuery;
 import org.example.v4pa.dao.CustomerQuery;
 import org.example.v4pa.helper.AppointmentFinder;
-import org.example.v4pa.helper.GeneralInterface;
 import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Contact;
 import org.example.v4pa.model.Customer;
@@ -25,6 +24,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/** This class creates a Reports view of the app.
+ *
+ */
 public class ReportsController implements Initializable {
     Parent scene;
     Stage stage;
@@ -151,6 +153,11 @@ public class ReportsController implements Initializable {
 
     }
 
+    /** This method initializes the values of the contact schedule table view.
+     * The appt type combo box is pre-populated based on the four meeting types and the contact combo box is pre-populated based on the contact query.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         reportsTotalApptsApptTypeDropdown.getItems().addAll(reportsMeetingTypes);

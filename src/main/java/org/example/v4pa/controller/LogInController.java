@@ -21,6 +21,9 @@ import java.util.*;
 import java.io.IOException;
 import java.net.URL;
 
+/** This class creates the Login view of the app.
+ * RUNTIME ERRORS: This form will generate errors if the username and password fields do not match a username/password combination in the database.
+ * This view and all warning boxes are also translated into English or French depending on the user's language settings. */
 public class LogInController implements Initializable {
 
     Stage stage;
@@ -77,6 +80,7 @@ public class LogInController implements Initializable {
         } catch (NullPointerException e) {
         }
 
+        /** LOGICAL ERROR: This error occurs if the username and password do not match any username/password combo in the database. */
         if (UserQuery.findUserID(username) == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
@@ -136,8 +140,6 @@ public class LogInController implements Initializable {
                 User user = UserQuery.findUserID(username);
                 ApptDetailsController.sendUserInfo(user);
 
-                LocalDate currentDate = LocalDate.now();
-                LocalTime currentTime = LocalTime.now();
                 outputFile.println("Login Attempt Success-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
                 //Close file
                 outputFile.close();
@@ -146,6 +148,7 @@ public class LogInController implements Initializable {
         }
     }
 
+    /** This method initializes the Login form fields to pre-populate in English or French based on User's language settings. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {

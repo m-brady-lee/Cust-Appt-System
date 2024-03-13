@@ -3,6 +3,7 @@ package org.example.v4pa.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/** This class creates the JDBC class which allows access to the MySQL database. */
 public abstract class JDBC {
 
     private static final String protocol = "jdbc";
@@ -15,6 +16,7 @@ public abstract class JDBC {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /** This method opens the connection to the database. */
     public static void openConnection()
     {
         try {
@@ -29,6 +31,7 @@ public abstract class JDBC {
         }
     }
 
+    /** This method closes the connection to the database. */
     public static void closeConnection() {
         try {
             connection.close();

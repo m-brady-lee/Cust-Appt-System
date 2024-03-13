@@ -27,6 +27,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/** This class creates the Edit Appointment view of the app.
+ * RUNTIME ERRORS: This form will generate a number of errors if certain fields do not meet the correct data format/criteria.
+ * For example, appointment start/end times and dates cannot overlap. All fields are required. */
 public class EditAppointmentController implements Initializable {
     Parent scene;
     Stage stage;
@@ -217,6 +220,10 @@ public class EditAppointmentController implements Initializable {
         LocalDate cutoffEndDate = easternEndZDT.toLocalDate();
         LocalDateTime cutoffmorningApptEnd = cutoffEndDate.atTime(8, 00);
         LocalDateTime cutoffeveningApptEnd = cutoffEndDate.atTime(22, 0);
+        ZonedDateTime utcEndZDT = localEndZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcEndLDT = utcEndZDT.toLocalDateTime();
+        ZonedDateTime utcStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcStartLDT = utcStartZDT.toLocalDateTime();
 
         /** LOGICAL ERROR: These errors are generated if the user tries to schedule an appointment outside of business hours. */
         if(easternEndLDT.isBefore(cutoffmorningApptEnd) || easternEndLDT.isAfter(cutoffeveningApptEnd)) {
@@ -307,7 +314,7 @@ public class EditAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the appointment edits?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                AppointmentQuery.updateAppointment(id, title, description, location, type, easternStartLDT, easternEndLDT, customerID, userID, contactID);
+                AppointmentQuery.updateAppointment(id, title, description, location, type, utcStartLDT, utcEndLDT, customerID, userID, contactID);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
@@ -325,21 +332,25 @@ public class EditAppointmentController implements Initializable {
         editapptUserComboBox.setItems(UserQuery.getAllUsers());
     }
 
+    /** This method sends the appointment information through the Appointment Details controller to the Edit Appointment controller and pre-populates the fields in the form.
+     * The method also converts the UTC time into the local time zone and displays the Start Date/Time in local time zone.
+     * @param appointment the appointment with the information that is preloaded into the Edit Appointment form.
+     */
     public void sendAppointment(Appointment appointment) {
         editapptApptIDText.setText(String.valueOf(appointment.getApptID()));
         editapptTitleText.setText(appointment.getApptTitle());
         editapptDescriptionText.setText(appointment.getApptDescription());
         editapptLocationText.setText(appointment.getApptLocation());
         editapptTypeComboBox.setValue(appointment.getApptType());
-        LocalDateTime easternStartLDT = appointment.getApptStart();
-        ZonedDateTime easternStartZDT = easternStartLDT.atZone(ZoneId.of("America/New_York"));
+        LocalDateTime utcStartLDT = appointment.getApptStart();
+        ZonedDateTime utcStartZDT = utcStartLDT.atZone(ZoneId.of("GMT"));
         ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
-        ZonedDateTime localStartZDT = easternStartZDT.withZoneSameInstant(localZoneID);
+        ZonedDateTime localStartZDT = utcStartZDT.withZoneSameInstant(localZoneID);
         editapptStartTimeText.setText(String.valueOf(localStartZDT.toLocalTime()));
         editapptStartDatePicker.setValue(localStartZDT.toLocalDate());
-        LocalDateTime easternEndLDT = appointment.getApptEnd();
-        ZonedDateTime easternEndZDT = easternEndLDT.atZone(ZoneId.of("America/New_York"));
-        ZonedDateTime localEndZDT = easternEndZDT.withZoneSameInstant(localZoneID);
+        LocalDateTime utcEndLDT = appointment.getApptEnd();
+        ZonedDateTime utcEndZDT = utcEndLDT.atZone(ZoneId.of("GMT"));
+        ZonedDateTime localEndZDT = utcEndZDT.withZoneSameInstant(localZoneID);
         editapptEndTimeText.setText(String.valueOf(localEndZDT.toLocalTime()));
         editapptEndDatePicker.setValue(localEndZDT.toLocalDate());
         int customerID = appointment.getApptCustomerID();

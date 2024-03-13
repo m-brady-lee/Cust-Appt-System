@@ -30,6 +30,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/** This class creates an Appointment Details view of the app.
+ * RUNTIME ERRORS: This form will generate errors if the user pushes the edit or delete buttons without first selecting an appointment from the table. */
 public class AppointmentDetailsController implements Initializable {
 
     Stage stage;
@@ -77,6 +79,8 @@ public class AppointmentDetailsController implements Initializable {
     private TableColumn<Appointment, Integer> apptdetailsUserIDColumn;
     @FXML
     private TableView<Appointment> apptdetailsTableView;
+    @FXML
+    private Label apptdetailsSelectApptLabel;
 
     LocalDateTime currentDateTime = LocalDateTime.now();
 
@@ -196,14 +200,18 @@ public class AppointmentDetailsController implements Initializable {
         }
     }
 
+    /** This method sends the user information through the Log In controller to the Appointment Details controller and verifies if a user has any upcoming appointments in 15 minutes.
+     * The method also converts the UTC time into the local time zone and displays the appointment ID and Start Date/Time in local time zone.
+     * @param user the user with the information to find all appointments that have the same User ID associated with it.
+     */
     public void sendUserInfo(User user) {
         userID = user.getUserID();
 
         ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
         ZonedDateTime localStartZDT = currentDateTime.atZone(localZoneID);
-        ZonedDateTime easternStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("America/New_York"));
-        LocalDateTime easternStartLDT = easternStartZDT.toLocalDateTime();
-        ObservableList<Appointment> upcomingAppts = AppointmentFinder.findUpcomingAppointments(easternStartLDT, userID);
+        ZonedDateTime utcStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcStartLDT = utcStartZDT.toLocalDateTime();
+        ObservableList<Appointment> upcomingAppts = AppointmentFinder.findUpcomingAppointments(utcStartLDT, userID);
         int numberOfUpcomingAppts = 0;
         numberOfUpcomingAppts = upcomingAppts.size();
         int apptID = 0;
@@ -213,9 +221,9 @@ public class AppointmentDetailsController implements Initializable {
             apptID = testAppointment.getApptID();
             apptStart = testAppointment.getApptStart();
         }
-        easternStartLDT = apptStart;
-        easternStartZDT = easternStartLDT.atZone(ZoneId.of("America/New_York"));
-        localStartZDT = easternStartZDT.withZoneSameInstant(localZoneID);
+        utcStartLDT = apptStart;
+        utcStartZDT = utcStartLDT.atZone(ZoneId.of("GMT"));
+        localStartZDT = utcStartZDT.withZoneSameInstant(localZoneID);
 
         if(numberOfUpcomingAppts > 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -235,6 +243,9 @@ public class AppointmentDetailsController implements Initializable {
         }
     }
 
+    /** This method initializes the values of the appointment details table view.
+     * LAMBDA - The lambda allows the user to see in detail the Appointment Title, Start Date and Start Time in local time.
+     * This makes it easier for a user to view appointment details as a preview. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -251,6 +262,19 @@ public class AppointmentDetailsController implements Initializable {
         apptdetailsEndDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("apptEnd"));
         apptdetailsCustIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
         apptdetailsUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptUserID"));
+
+
+        apptdetailsTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldAppt, newAppt) -> {
+            if (newAppt != null) {
+                ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
+                LocalDateTime utcStartLDT = newAppt.getApptStart();
+                ZonedDateTime utcStartZDT = utcStartLDT.atZone(ZoneId.of("GMT"));
+                ZonedDateTime localStartZDT = utcStartZDT.withZoneSameInstant(localZoneID);
+                apptdetailsSelectApptLabel.setText(newAppt.getApptTitle().toUpperCase() + "\nStart Date:\t\t" + localStartZDT.toLocalDate() + "\nStart Time:\t\t" + localStartZDT.toLocalTime());
+            }
+        });
+
+
     }
 
 }

@@ -26,6 +26,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class creates the Add Customer view of the app.
+ * RUNTIME ERRORS: This form will generate errors if each field is not filled out. All fields are required. */
 public class AddCustomerController implements Initializable {
 
     Stage stage;
@@ -135,6 +137,7 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /** This method initializes the values of the Country and Province combo boxes. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addcustomerCountryDropdown.setItems(CountryQuery.getAllCountries());
@@ -143,6 +146,7 @@ public class AddCustomerController implements Initializable {
 
     }
 
+    /** This method sets unique values of the Province combo box based on the Country the user selects. */
     public void setStateOrProvince(ActionEvent event) {
         String customerCountry = String.valueOf(addcustomerCountryDropdown.getValue());
 

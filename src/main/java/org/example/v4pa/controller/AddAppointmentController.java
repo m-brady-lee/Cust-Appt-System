@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import org.example.v4pa.dao.*;
 import org.example.v4pa.helper.AppointmentFinder;
 import org.example.v4pa.helper.CustomerFinder;
-import org.example.v4pa.helper.GeneralInterface;
 import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Contact;
 import org.example.v4pa.model.Customer;
@@ -23,11 +22,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
-import java.time.chrono.ChronoZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/** This class creates the Add Appointment view of the app.
+ * RUNTIME ERRORS: This form will generate a number of errors if certain fields do not meet the correct data format/criteria.
+ * For example, appointment start/end times and dates cannot overlap. All fields are required. */
 public class AddAppointmentController implements Initializable {
 
     Parent scene;
@@ -168,6 +169,8 @@ public class AddAppointmentController implements Initializable {
         LocalDate cutoffStartDate = easternStartZDT.toLocalDate();
         LocalDateTime cutoffmorningApptStart = cutoffStartDate.atTime(8, 00);
         LocalDateTime cutoffeveningApptStart = cutoffStartDate.atTime(22, 0);
+        ZonedDateTime utcStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcStartLDT = utcStartZDT.toLocalDateTime();
 
         /** LOGICAL ERROR: This error is generated if the user tries to schedule an appointment outside of business hours. */
         if(easternStartLDT.isBefore(cutoffmorningApptStart) || easternStartLDT.isAfter(cutoffeveningApptStart)) {
@@ -216,6 +219,8 @@ public class AddAppointmentController implements Initializable {
         LocalDate cutoffEndDate = easternEndZDT.toLocalDate();
         LocalDateTime cutoffmorningApptEnd = cutoffEndDate.atTime(8, 00);
         LocalDateTime cutoffeveningApptEnd = cutoffEndDate.atTime(22, 0);
+        ZonedDateTime utcEndZDT = localEndZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcEndLDT = utcEndZDT.toLocalDateTime();
 
         /** LOGICAL ERROR: These errors are generated if the user tries to schedule an appointment outside of business hours. */
         if(easternEndLDT.isBefore(cutoffmorningApptEnd) || easternEndLDT.isAfter(cutoffeveningApptEnd)) {
@@ -308,7 +313,7 @@ public class AddAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new appointment?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                AppointmentQuery.addAppointment(title, description, location, type, easternStartLDT, easternEndLDT, customerID, userID, contactID);
+                AppointmentQuery.addAppointment(title, description, location, type, utcStartLDT, utcEndLDT, customerID, userID, contactID);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
@@ -319,6 +324,7 @@ public class AddAppointmentController implements Initializable {
     }
 
 
+    /** This method initializes the values of the Type, Contact, and Customer combo boxes. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addapptTypeComboBox.getItems().addAll(addapptMeetingTypes);

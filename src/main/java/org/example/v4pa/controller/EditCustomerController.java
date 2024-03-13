@@ -22,6 +22,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class creates the Edit Customer view of the app.
+ * RUNTIME ERRORS: This form will generate errors if each field is not filled out. All fields are required. */
 public class EditCustomerController implements Initializable {
 
     Parent scene;
@@ -150,14 +152,15 @@ public class EditCustomerController implements Initializable {
 
     }
 
+    /** This method initializes the values of the Country and Province combo boxes. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         editcustomerCountryComboBox.setItems(CountryQuery.getAllCountries());
         editcustomerCountryComboBox.setOnAction(this::setStateOrProvince);
         editcustomerProvinceComboBox.setItems(FirstLevelDivisionQuery.getAllDivisions());
-
     }
 
+    /** This method sets unique values of the Province combo box based on the Country the user selects. */
     public void setStateOrProvince(ActionEvent event) {
         String customerCountry = String.valueOf(editcustomerCountryComboBox.getValue());
 
@@ -178,6 +181,9 @@ public class EditCustomerController implements Initializable {
         }
     }
 
+    /** This method sends the customer information through the Customer Details controller to the Edit Customer controller and pre-populates the fields in the form.
+     * @param customer the customer with the information that is preloaded into the Edit Customer form.
+     */
     public void sendCustomer(Customer customer) {
 
         editcustomerIDText.setText(String.valueOf(customer.getCustomerID()));

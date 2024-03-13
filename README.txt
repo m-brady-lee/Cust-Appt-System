@@ -4,7 +4,7 @@ Purpose: This is an application that allows a user to add, edit, and delete appo
 
 Author: Michael Lee
 Contact Information: mlee528@wgu.edu
-Student Application Version: ????????????
+Student Application Version: V1
 Date: 3/12/24
 
 IDE: Intellij IDEA 2023.3.3 (Community Edition). JDK-11.0.22  JavaFX-SDK-21.0.2

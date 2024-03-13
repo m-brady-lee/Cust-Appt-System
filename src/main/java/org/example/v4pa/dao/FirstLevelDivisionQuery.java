@@ -9,8 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/** This class creates the FirstLevelDivisionQuery class that pulls FirstLevelDivision-related information from the database. */
 public abstract class FirstLevelDivisionQuery {
 
+    /** This method pulls all of the first level divisions associated with a specific country ID.
+     * @param countryID the ID to determine the list of first level divisions.
+     * */
     public static ObservableList<FirstLevelDivision> selectDivision (int countryID) {
         ObservableList<FirstLevelDivision> selectedDivision = FXCollections.observableArrayList();
         String sql = "SELECT * FROM first_level_divisions WHERE Country_ID = ?";
@@ -31,6 +35,7 @@ public abstract class FirstLevelDivisionQuery {
         //return Observable List of Divisions
     }
 
+    /** This method pulls every first level division from the database. */
     public static ObservableList<FirstLevelDivision> getAllDivisions() {
         ObservableList<FirstLevelDivision> divisionList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM first_level_divisions";
@@ -50,6 +55,9 @@ public abstract class FirstLevelDivisionQuery {
         return divisionList;
     }
 
+    /** This method pulls a specific first level division based on the divisionName.
+     * @param divisionName the name to determine the firstleveldivision from the total divisionList.
+     * */
     public static FirstLevelDivision findDivisionID(String divisionName) {
         ObservableList<FirstLevelDivision> divisionList = getAllDivisions();
             for(FirstLevelDivision testDivision : divisionList) {
@@ -60,6 +68,9 @@ public abstract class FirstLevelDivisionQuery {
             return null;
     }
 
+    /** This method pulls a specific first level division based on the divisionID.
+     * @param divisionID the ID to determine the firstleveldivision from the total divisionList.
+     * */
     public static FirstLevelDivision findDivisionName(int divisionID) {
         ObservableList<FirstLevelDivision> divisionList = getAllDivisions();
         for(FirstLevelDivision testDivision : divisionList) {
@@ -68,17 +79,5 @@ public abstract class FirstLevelDivisionQuery {
             }
         }
         return null;
-    }
-
-    public static void selectAll () throws SQLException {
-        String sql = "SELECT * FROM first_level_divisions";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int divisionID = rs.getInt("Division_ID");
-            String divisionName = rs.getString("Division");
-            System.out.print(divisionID + " | ");
-            System.out.print(divisionName + "\n");
-        }
     }
 }

@@ -12,8 +12,10 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.PropertyPermission;
 
+/** This class creates the CustomerQuery class that pulls Customer-related information from the database. */
 public abstract class CustomerQuery {
 
+    /** This method pulls every customer from the database. */
     public static ObservableList<Customer> getAllCustomers() {
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
         String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
@@ -39,6 +41,7 @@ public abstract class CustomerQuery {
         return customerList;
     }
 
+    /** This method adds a new customer to the database. */
     public static int addCustomer(String customerName, String customerAddress, String customerPostalCode, String customerPhone, int customerDivisionID) throws SQLException {
         String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES(?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -52,6 +55,8 @@ public abstract class CustomerQuery {
         return rowsAffected;
     }
 
+    /** This method updates an existing customer from the database.
+     * It first finds the customer from the customer ID and then updates all subsequent information. */
     public static int updateCustomer(int customerID, String customerName, String customerAddress, String customerPostalCode, String customerPhone, int customerDivisionID) throws SQLException {
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -66,6 +71,7 @@ public abstract class CustomerQuery {
         return rowsAffected;
     }
 
+    /** This method deletes a customer from the database. */
     public static int deleteCustomer(int customerID) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -75,54 +81,54 @@ public abstract class CustomerQuery {
         return rowsAffected;
     }
 
-    public static ObservableList<Customer> selectCustomer(int customerID) throws SQLException {
-        ObservableList<Customer> customerList = FXCollections.observableArrayList();
-        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
-        "FROM customers, first_level_divisions\n" +
-                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_ID = ?";;
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setInt(1, customerID);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String name = rs.getString("Customer_Name");
-                String address = rs.getString("Address");
-                String postalCode = rs.getString("Postal_Code");
-                String phone = rs.getString("Phone");
-                int divisionID = rs.getInt("Division_ID");
-                int countryID = rs.getInt("Country_ID");
-                Customer c = new Customer(customerID, name, address, postalCode, phone, divisionID, countryID);
-                customerList.add(c);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customerList;
-    }
-
-    public static ObservableList<Customer> selectCustomer(String customerName) throws SQLException {
-        ObservableList<Customer> customerList = FXCollections.observableArrayList();
-        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
-                "FROM customers, first_level_divisions\n" +
-                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_Name = ?";;
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setString(1, customerName);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("Customer_ID");
-                String address = rs.getString("Address");
-                String postalCode = rs.getString("Postal_Code");
-                String phone = rs.getString("Phone");
-                int divisionID = rs.getInt("Division_ID");
-                int countryID = rs.getInt("Country_ID");
-                Customer c = new Customer(id, customerName, address, postalCode, phone, divisionID, countryID);
-                customerList.add(c);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customerList;
-    }
+//    public static ObservableList<Customer> selectCustomer(int customerID) throws SQLException {
+//        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+//        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
+//        "FROM customers, first_level_divisions\n" +
+//                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_ID = ?";;
+//        try {
+//            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+//            ps.setInt(1, customerID);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                String name = rs.getString("Customer_Name");
+//                String address = rs.getString("Address");
+//                String postalCode = rs.getString("Postal_Code");
+//                String phone = rs.getString("Phone");
+//                int divisionID = rs.getInt("Division_ID");
+//                int countryID = rs.getInt("Country_ID");
+//                Customer c = new Customer(customerID, name, address, postalCode, phone, divisionID, countryID);
+//                customerList.add(c);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return customerList;
+//    }
+//
+//    public static ObservableList<Customer> selectCustomer(String customerName) throws SQLException {
+//        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+//        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, first_level_divisions.Division_ID, Country_ID  \n" +
+//                "FROM customers, first_level_divisions\n" +
+//                "WHERE customers.Division_ID = first_level_divisions.Division_ID AND Customer_Name = ?";;
+//        try {
+//            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+//            ps.setString(1, customerName);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                int id = rs.getInt("Customer_ID");
+//                String address = rs.getString("Address");
+//                String postalCode = rs.getString("Postal_Code");
+//                String phone = rs.getString("Phone");
+//                int divisionID = rs.getInt("Division_ID");
+//                int countryID = rs.getInt("Country_ID");
+//                Customer c = new Customer(id, customerName, address, postalCode, phone, divisionID, countryID);
+//                customerList.add(c);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return customerList;
+//    }
 
 }

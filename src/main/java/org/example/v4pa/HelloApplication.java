@@ -5,18 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.JDBC;
-import org.example.v4pa.helper.GeneralInterface;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.time.*;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.TimeZone;
 
+/** This class creates an app for the Customer Appointment System.
+ This is the main class. */
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -27,10 +22,16 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+/** This is the main method. This is the first method that gets called when you run the program.
+ * This method also opens and closes the database connection, allowing the user to connect to the MySQL database.
+ * JAVA DOC FILE LOCATION: /V6-PA/index.html
+ */
     public static void main(String[] args) throws SQLException, FileNotFoundException {
         JDBC.openConnection();
 
         launch();
+
+        JDBC.closeConnection();
 
         //Value returning Lambda Expression
 //        GeneralInterface square = n -> n * n;
@@ -64,8 +65,10 @@ public class HelloApplication extends Application {
 
         // Zone ID MST (UTC -7), EST (UTC -5), GMT (UTC +0)
 
-//        ZoneId.getAvailableZoneIds().stream().filter(c -> c.contains("America")).forEach(System.out::println);
+//        ZoneId.getAvailableZoneIds().stream().filter(c -> c.contains("")).forEach(System.out::println);
 
-        JDBC.closeConnection();
+
+
+
     }
 }

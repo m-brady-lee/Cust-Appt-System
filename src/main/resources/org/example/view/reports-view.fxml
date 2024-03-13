@@ -141,8 +141,8 @@
           <TableColumn fx:id="reportsTitleColumn" prefWidth="128.0" text="Title" />
             <TableColumn fx:id="reportsTypeColumn" prefWidth="147.0" text="Type" />
             <TableColumn fx:id="reportsDescriptionColumn" prefWidth="160.0" text="Description" />
-            <TableColumn fx:id="reportsStartDateColumn" prefWidth="155.0" text="Start Date / Time (ET)" />
-            <TableColumn fx:id="reportsEndDateColumn" prefWidth="133.0" text="End Date / Time (ET)" />
+            <TableColumn fx:id="reportsStartDateColumn" prefWidth="155.0" text="Start Date / Time (UTC)" />
+            <TableColumn fx:id="reportsEndDateColumn" prefWidth="133.0" text="End Date / Time (UTC)" />
             <TableColumn fx:id="reportsCustomerIDColumn" prefWidth="51.0" text="Cust. ID" />
         </columns>
       </TableView>

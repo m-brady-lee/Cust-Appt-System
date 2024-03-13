@@ -1,7 +1,7 @@
 package org.example.v4pa.model;
 
+/** This class creates the User class for storing User objects. */
 public class User {
-    public static int userCounter = 1;
     private int userID;
     private String userName;
     private String userPassword;
@@ -12,30 +12,49 @@ public class User {
         this.userPassword = userPassword;
     }
 
+    /**
+     *
+     * @return userID
+     */
     public int getUserID() {
         return userID;
     }
-
+    /**
+     * @param userID to set
+     */
     public void setUserID(int userID) {
         this.userID = userID;
     }
-
+    /**
+     *
+     * @return userName
+     */
     public String getUserName() {
         return userName;
     }
-
+    /**
+     * @param userName to set
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+    /**
+     *
+     * @return userPassword
+     */
     public String getUserPassword() {
         return userPassword;
     }
-
+    /**
+     * @param userPassword to set
+     */
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
-
+    /**
+     *
+     * @return userName
+     */
     @Override
     public String toString() {
         return (userName);

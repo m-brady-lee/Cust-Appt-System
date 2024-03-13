@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.v4pa.dao.CustomerQuery;
+import org.example.v4pa.dao.FirstLevelDivisionQuery;
 import org.example.v4pa.helper.CustomerFinder;
 import org.example.v4pa.model.Appointment;
 import org.example.v4pa.model.Customer;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class creates an Appointment Details view of the app.
+ * RUNTIME ERRORS: This form will generate errors if the user pushes the edit or delete buttons without first selecting a customer from the table. */
 public class CustomerDetailsController implements Initializable {
 
     Stage stage;
@@ -60,6 +63,9 @@ public class CustomerDetailsController implements Initializable {
 
     @FXML
     private Button custdetailsReportsButton;
+
+    @FXML
+    private Label custdetailsSelectCustomerLabel;
 
     @FXML
     void onActionDisplayAddCustMenu(ActionEvent event) throws IOException {
@@ -155,6 +161,8 @@ public class CustomerDetailsController implements Initializable {
         }
     }
 
+    /** This method initializes the values of the customer details table view.
+     * LAMBDA - The lambda allows the user to see in detail the Customer Name and Province when a customer is selected from the table view. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -167,6 +175,12 @@ public class CustomerDetailsController implements Initializable {
         custdetailsPostalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("customerPostalCode"));
         custdetailsPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
         custdetailsDivisionIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerDivisionID"));
+
+        custdetailsTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldCustomer, newCustomer) -> {
+            if (newCustomer != null) {
+                custdetailsSelectCustomerLabel.setText(newCustomer.getCustomerName() + "\t\tLocation:\t" + FirstLevelDivisionQuery.findDivisionName(newCustomer.getCustomerDivisionID()));
+            }
+        });
     }
 }
 

@@ -11,8 +11,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/** This class creates Appointment Query class, which pulls appointment-related information from the MySQL database. */
 public abstract class AppointmentQuery {
 
+    /** This method pulls every appointment from the database. */
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM appointments";
@@ -39,6 +41,7 @@ public abstract class AppointmentQuery {
         return appointmentList;
     }
 
+    /** This method adds a new appointment to the database. */
     public static int addAppointment(String apptTitle, String apptDescription, String apptLocation, String apptType, LocalDateTime apptStart, LocalDateTime apptEnd, int custID, int userID, int contactID) throws SQLException {
         String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -57,6 +60,8 @@ public abstract class AppointmentQuery {
         return rowsAffected;
     }
 
+    /** This method updates an existing appointment from the database.
+     * It first finds the appointment from the appointment ID and then updates all subsequent information. */
     public static int updateAppointment(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType, LocalDateTime apptStart, LocalDateTime apptEnd, int custID, int userID, int contactID) throws SQLException {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -76,6 +81,7 @@ public abstract class AppointmentQuery {
         return rowsAffected;
     }
 
+    /** This method deletes an appointment from the database. */
     public static int deleteAppointment (int appointmentID) throws SQLException {
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -86,30 +92,30 @@ public abstract class AppointmentQuery {
     }
 
 
-    public static ObservableList<Appointment> selectAppointment(int appointmentID) throws SQLException {
-        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM appointments WHERE Appointment_ID = ?";
-        try {
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setInt(1, appointmentID);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String title = rs.getString("Title");
-                String description = rs.getString("Description");
-                String location = rs.getString("Location");
-                String type = rs.getString("Type");
-                LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
-                int customerID = rs.getInt("Customer_ID");
-                int userID = rs.getInt("User_ID");
-                int contactID = rs.getInt("Contact_ID");
-                Appointment a = new Appointment(customerID, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
-                appointmentList.add(a);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return appointmentList;
-    }
+//    public static ObservableList<Appointment> selectAppointment(int appointmentID) throws SQLException {
+//        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+//        String sql = "SELECT * FROM appointments WHERE Appointment_ID = ?";
+//        try {
+//            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+//            ps.setInt(1, appointmentID);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                String title = rs.getString("Title");
+//                String description = rs.getString("Description");
+//                String location = rs.getString("Location");
+//                String type = rs.getString("Type");
+//                LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+//                LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
+//                int customerID = rs.getInt("Customer_ID");
+//                int userID = rs.getInt("User_ID");
+//                int contactID = rs.getInt("Contact_ID");
+//                Appointment a = new Appointment(customerID, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
+//                appointmentList.add(a);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return appointmentList;
+//    }
 
 }

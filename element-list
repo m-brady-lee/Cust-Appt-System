@@ -1,0 +1,7 @@
+module:c195.v6pa
+c195.v6pa
+org.example.v4pa
+org.example.v4pa.controller
+org.example.v4pa.dao
+org.example.v4pa.helper
+org.example.v4pa.model
