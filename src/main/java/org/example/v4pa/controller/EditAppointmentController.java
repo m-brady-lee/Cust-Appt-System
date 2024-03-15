@@ -294,15 +294,18 @@ public class EditAppointmentController implements Initializable {
         LocalDateTime testStart = currentDateTime;
         LocalDateTime testEnd = currentDateTime;
         for(Appointment testAppt : customerAppts) {
-            if(
-                    (testAppt.getApptStart().isBefore(utcEndLDT) && testAppt.getApptStart().isAfter(utcStartLDT)) ||
-                            (testAppt.getApptStart().isBefore(utcStartLDT) && testAppt.getApptEnd().isAfter(utcEndLDT)) ||
-                            (testAppt.getApptEnd().isAfter(utcStartLDT) && testAppt.getApptEnd().isBefore(utcEndLDT))) {
-                conflictingAppts.add(testAppt);
-                testName = editapptCustComboBox.getValue().toString();
-                testID = testAppt.getApptID();
-                testStart = testAppt.getApptStart();
-                testEnd = testAppt.getApptEnd();
+            if (!(testAppt.getApptID() == id)) {
+                if(
+                        (testAppt.getApptStart().isBefore(utcEndLDT) && testAppt.getApptStart().isAfter(utcStartLDT)) ||
+                                (testAppt.getApptStart().isBefore(utcStartLDT) && testAppt.getApptEnd().isAfter(utcEndLDT)) ||
+                                (testAppt.getApptEnd().isAfter(utcStartLDT) && testAppt.getApptEnd().isBefore(utcEndLDT))) {
+
+                    conflictingAppts.add(testAppt);
+                    testName = editapptCustComboBox.getValue().toString();
+                    testID = testAppt.getApptID();
+                    testStart = testAppt.getApptStart();
+                    testEnd = testAppt.getApptEnd();
+                }
             }
         }
 
