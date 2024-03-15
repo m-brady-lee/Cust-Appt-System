@@ -83,7 +83,7 @@ public class LogInController implements Initializable {
         /** LOGICAL ERROR: This error occurs if the username and password do not match any username/password combo in the database. */
         if (UserQuery.findUserID(username) == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error Dialog");
+            alert.setTitle(rb.getString("error_dialog"));
             alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
             outputFile.println("Login Attempt Failure-\tUsername: " + username + "\tPassword: " + password + "\tDate: " + easternLD + "\tTimestamp(ET): " + easternLT);
@@ -92,7 +92,7 @@ public class LogInController implements Initializable {
             return;
         } else if (!(UserQuery.findUserID(username) == null) && (UserQuery.findUserPassword(username) == null)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error Dialog");
+            alert.setTitle(rb.getString("error_dialog"));
             alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
             LocalDate currentDate = LocalDate.now();
@@ -103,7 +103,7 @@ public class LogInController implements Initializable {
             return;
         } else if (UserQuery.findUserNameWithPassword(password) == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error Dialog");
+            alert.setTitle(rb.getString("error_dialog"));
             alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
             LocalDate currentDate = LocalDate.now();
@@ -114,7 +114,7 @@ public class LogInController implements Initializable {
             return;
         } else if (!(UserQuery.findUserNameWithPassword(password) == null) && (UserQuery.findUserID(username) == null)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Error Dialog");
+            alert.setTitle(rb.getString("error_dialog"));
             alert.setContentText(rb.getString("valid_user_pw"));
             alert.showAndWait();
             LocalDate currentDate = LocalDate.now();

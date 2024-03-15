@@ -171,25 +171,27 @@ public class AppointmentDetailsController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 String appointmentName = String.valueOf(apptdetailsTableView.getSelectionModel().getSelectedItem().getApptTitle());
+                int appointmentID = apptdetailsTableView.getSelectionModel().getSelectedItem().getApptID();
+                String appointmentType = String.valueOf(apptdetailsTableView.getSelectionModel().getSelectedItem().getApptType());
                 AppointmentQuery.deleteAppointment(apptdetailsTableView.getSelectionModel().getSelectedItem().getApptID());
                 if(apptdetailsByWeekRadioButton.isSelected()) {
                     apptdetailsTableView.setItems(AppointmentFinder.findWeeklyAppointments(currentDateTime));
                     Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
                     alertDelete.setTitle("Confirmation");
-                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.setContentText("Appt. " + appointmentID + ":\t\t" + appointmentName + " has been deleted.\n" + "Appt. Type:\t\t" + appointmentType);
                     alertDelete.showAndWait();
                 } else if (apptdetailsByMonthRadioButton.isSelected()) {
                     apptdetailsTableView.setItems(AppointmentFinder.findMonthlyAppointments(currentDateTime));
                     Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
                     alertDelete.setTitle("Confirmation");
-                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.setContentText("Appt. " + appointmentID + ":\t\t" + appointmentName + " has been deleted.\n" + "Appt. Type:\t\t" + appointmentType);
                     alertDelete.showAndWait();
                 } else {
                     ObservableList<Appointment> appointmentsList = AppointmentQuery.getAllAppointments();
                     apptdetailsTableView.setItems(appointmentsList);
                     Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
                     alertDelete.setTitle("Confirmation");
-                    alertDelete.setContentText(appointmentName + " has been deleted.");
+                    alertDelete.setContentText("Appt. " + appointmentID + ":\t\t" + appointmentName + " has been deleted.\n" + "Appt. Type:\t\t" + appointmentType);
                     alertDelete.showAndWait();
                 }
             }

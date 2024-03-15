@@ -144,7 +144,7 @@ public class CustomerDetailsController implements Initializable {
                     custdetailsTableView.setItems(CustomerQuery.getAllCustomers());
                     Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
                     alertDelete.setTitle("Confirmation");
-                    alertDelete.setContentText(customerName + " has been deleted.");
+                    alertDelete.setContentText("Cust. " + customerID + ":\t\t" + customerName + " has been deleted.");
                     alertDelete.showAndWait();
                 }
             }

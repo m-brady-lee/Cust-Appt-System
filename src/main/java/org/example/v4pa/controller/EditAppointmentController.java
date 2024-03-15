@@ -289,9 +289,9 @@ public class EditAppointmentController implements Initializable {
         LocalDateTime testEnd = currentDateTime;
         for(Appointment testAppt : customerAppts) {
             if(
-                    (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
-                            (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
-                            (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
+                    (testAppt.getApptStart().isBefore(utcEndLDT) && testAppt.getApptStart().isAfter(utcStartLDT)) ||
+                            (testAppt.getApptStart().isBefore(utcStartLDT) && testAppt.getApptEnd().isAfter(utcEndLDT)) ||
+                            (testAppt.getApptEnd().isAfter(utcStartLDT) && testAppt.getApptEnd().isBefore(utcEndLDT))) {
                 conflictingAppts.add(testAppt);
                 testName = editapptCustComboBox.getValue().toString();
                 testID = testAppt.getApptID();
@@ -299,14 +299,21 @@ public class EditAppointmentController implements Initializable {
                 testEnd = testAppt.getApptEnd();
             }
         }
+
+        ZonedDateTime utcOldApptStartZDT = testStart.atZone(ZoneId.of("GMT"));
+        ZonedDateTime localOldApptStartZDT = utcOldApptStartZDT.withZoneSameInstant(localZoneID);
+        LocalDateTime localOldApptStartLDT = localOldApptStartZDT.toLocalDateTime();
+        ZonedDateTime utcOldApptEndZDT = testEnd.atZone(ZoneId.of("GMT"));
+        ZonedDateTime localOldApptEndZDT = utcOldApptEndZDT.withZoneSameInstant(localZoneID);
+        LocalDateTime localOldApptEndLDT = localOldApptEndZDT.toLocalDateTime();
         if(conflictingAppts.size() > 0) {
             Alert alert2 = new Alert(Alert.AlertType.WARNING);
             alert2.setTitle("Scheduling conflict!");
-            alert2.setContentText(testName + " has an appointment scheduled during this time:\n" +
-                    "\tAppt. ID: " + testID + "\n" +
-                    "\t Start:  " + testStart + "\n" +
-                    "\t End:  " + testEnd + "\n\n" +
-                    "\tPlease choose another start and end time");
+            alert2.setContentText(testName + " has another appointment scheduled during this time:\n" +
+                    "\n\t\tAppt. ID: " + testID + "\n" +
+                    "\t\tStart:  " + localOldApptStartLDT + "\n" +
+                    "\t\tEnd:  " + localOldApptEndLDT + "\n" +
+                    "\n\tPlease choose another start and end time");
             alert2.showAndWait();
             return;
         }
