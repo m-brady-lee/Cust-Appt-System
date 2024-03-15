@@ -171,13 +171,21 @@ public class EditAppointmentController implements Initializable {
         LocalDateTime easternStartLDT = easternStartZDT.toLocalDateTime();
         LocalDate cutoffStartDate = easternStartZDT.toLocalDate();
         LocalDateTime cutoffmorningApptStart = cutoffStartDate.atTime(8, 00);
+        ZonedDateTime cutoffmorningETZone = cutoffmorningApptStart.atZone(ZoneId.of("America/New_York"));
+        ZonedDateTime cutoffmorningLocalTime = cutoffmorningETZone.withZoneSameInstant(localZoneID);
+        LocalTime cutoffmorningLocalLDT = cutoffmorningLocalTime.toLocalTime();
         LocalDateTime cutoffeveningApptStart = cutoffStartDate.atTime(22, 0);
+        ZonedDateTime cutoffeveningETZone = cutoffeveningApptStart.atZone(ZoneId.of("America/New_York"));
+        ZonedDateTime cutoffeveningLocalTime = cutoffeveningETZone.withZoneSameInstant(localZoneID);
+        LocalTime cutoffeveningLocalLDT = cutoffeveningLocalTime.toLocalTime();
+        ZonedDateTime utcStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("GMT"));
+        LocalDateTime utcStartLDT = utcStartZDT.toLocalDateTime();
 
         /** LOGICAL ERROR: This error is generated if the user tries to schedule an appointment outside of business hours. */
         if(easternStartLDT.isBefore(cutoffmorningApptStart) || easternStartLDT.isAfter(cutoffeveningApptStart)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
-            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\t\t\t8:00 AM - 10:00 PM ET");
+            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\n\t\t\t08:00 - 22:00 (ET)\n" + "\t\t\t" + cutoffmorningLocalLDT + " - " + cutoffeveningLocalLDT + " (Local Time)");
             alert.showAndWait();
             return;
         }
@@ -222,14 +230,12 @@ public class EditAppointmentController implements Initializable {
         LocalDateTime cutoffeveningApptEnd = cutoffEndDate.atTime(22, 0);
         ZonedDateTime utcEndZDT = localEndZDT.withZoneSameInstant(ZoneId.of("GMT"));
         LocalDateTime utcEndLDT = utcEndZDT.toLocalDateTime();
-        ZonedDateTime utcStartZDT = localStartZDT.withZoneSameInstant(ZoneId.of("GMT"));
-        LocalDateTime utcStartLDT = utcStartZDT.toLocalDateTime();
 
         /** LOGICAL ERROR: These errors are generated if the user tries to schedule an appointment outside of business hours. */
         if(easternEndLDT.isBefore(cutoffmorningApptEnd) || easternEndLDT.isAfter(cutoffeveningApptEnd)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error Dialog");
-            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\t\t\t8:00 AM - 10:00 PM ET");
+            alert.setContentText("Appointments must be scheduled within business hours:\n" + "\n\t\t\t08:00 - 22:00 (ET)\n" + "\t\t\t" + cutoffmorningLocalLDT + " - " + cutoffeveningLocalLDT + " (Local Time)");
             alert.showAndWait();
             return;
         }

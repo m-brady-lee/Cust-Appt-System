@@ -62,3 +62,12 @@ Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 02:55:11.018776
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 02:56:58.335196
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 02:58:27.914726
+Login Attempt Failure-	Username: tets	Password: asfs	Date: 2024-03-15	Timestamp(ET): 03:03:11.682767
+Login Attempt Failure-	Username: tets	Password: test	Date: 2024-03-15	Timestamp(ET): 03:03:11.682767
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:03:11.682767
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:21:30.278456
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:22:29.800278
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:23:28.766038
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:27:11.080546
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:29:54.896091
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 03:35:15.392589
