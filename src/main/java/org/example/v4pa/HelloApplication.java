@@ -9,15 +9,17 @@ import org.example.v4pa.dao.JDBC;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /** This class creates an app for the Customer Appointment System.
  This is the main class. */
 public class HelloApplication extends Application {
+    ResourceBundle rb = ResourceBundle.getBundle("/Nat");
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/org/example/view/log-in-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello world!");
+        stage.setTitle(rb.getString("hello"));
         stage.setScene(scene);
         stage.show();
     }

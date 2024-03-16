@@ -74,3 +74,7 @@ Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 15:26:45.100850
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 15:37:02.433974
 Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 15:46:25.799362
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-15	Timestamp(ET): 16:14:07.679514
+Login Attempt Failure-	Username: test	Password: esadf	Date: 2024-03-16	Timestamp(ET): 11:52:46.582396
+Login Attempt Success-	Username: test	Password: test	Date: 2024-03-16	Timestamp(ET): 11:52:46.582396
+Login Attempt Failure-	Username: 	Password: 	Date: 2024-03-16	Timestamp(ET): 11:57:22.703638
