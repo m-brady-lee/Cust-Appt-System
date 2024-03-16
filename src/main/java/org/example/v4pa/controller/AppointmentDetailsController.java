@@ -272,7 +272,7 @@ public class AppointmentDetailsController implements Initializable {
                 LocalDateTime utcStartLDT = newAppt.getApptStart();
                 ZonedDateTime utcStartZDT = utcStartLDT.atZone(ZoneId.of("GMT"));
                 ZonedDateTime localStartZDT = utcStartZDT.withZoneSameInstant(localZoneID);
-                apptdetailsSelectApptLabel.setText(newAppt.getApptTitle().toUpperCase() + "\nStart Date:\t\t" + localStartZDT.toLocalDate() + "\nStart Time:\t\t" + localStartZDT.toLocalTime());
+                apptdetailsSelectApptLabel.setText(newAppt.getApptTitle().toUpperCase() + "\nStart Date:\t\t" + newAppt.getApptStart().toLocalDate() + "\nStart Time:\t\t" + newAppt.getApptStart().toLocalTime());
             }
         });
 

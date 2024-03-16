@@ -294,9 +294,9 @@ public class AddAppointmentController implements Initializable {
 
         for(Appointment testAppt : customerAppts) {
             if(
-                    (testAppt.getApptStart().isBefore(utcEndLDT) && testAppt.getApptStart().isAfter(utcStartLDT)) ||
-                            (testAppt.getApptStart().isBefore(utcStartLDT) && testAppt.getApptEnd().isAfter(utcEndLDT)) ||
-                            (testAppt.getApptEnd().isAfter(utcStartLDT) && testAppt.getApptEnd().isBefore(utcEndLDT))) {
+                    (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
+                            (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                            (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
                 conflictingAppts.add(testAppt);
                 testName = addapptCustComboBox.getValue().toString();
                 testID = testAppt.getApptID();
@@ -319,8 +319,8 @@ public class AddAppointmentController implements Initializable {
             alert2.setContentText(
                     testName + " has another appointment scheduled during this time:\n" +
                     "\n\t\tAppt. ID: " + testID + "\n" +
-                    "\t\tStart:  " + localOldApptStartLDT + "\n" +
-                    "\t\tEnd:  " + localOldApptEndLDT + "\n" +
+                    "\t\tStart:  " + testStart + "\n" +
+                    "\t\tEnd:  " + testEnd + "\n" +
                     "\n\tPlease choose another start and end time");
             alert2.showAndWait();
             return;
@@ -329,7 +329,7 @@ public class AddAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the new appointment?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                AppointmentQuery.addAppointment(title, description, location, type, utcStartLDT, utcEndLDT, customerID, userID, contactID);
+                AppointmentQuery.addAppointment(title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));

@@ -4,7 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /** This class creates the Appointment class for storing Appointment objects. */
 public class Appointment {
@@ -14,6 +17,8 @@ public class Appointment {
     private String apptLocation;
     private String apptType;
     private LocalDateTime apptStart;
+    private LocalDateTime apptStartLocalTime;
+
     private LocalDateTime apptEnd;
     private int apptCustomerID;
     private int apptUserID;
@@ -46,6 +51,23 @@ public class Appointment {
      */
     public void setApptID(int apptID) {
         this.apptID = apptID;
+    }
+
+    /**
+     * @return the apptStartLocalTime
+     */
+    public LocalDateTime getApptStartLocalTime() {
+        return apptStartLocalTime;
+    }
+
+    /**
+     * @param apptStart the apptStart LocalDateTime to use to set the local time
+     */
+    public void setApptStartLocalTime(LocalDateTime apptStart) {
+
+        ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
+        ZonedDateTime apptStartZoneTime = apptStart.atZone(localZoneID);
+        apptStartLocalTime = apptStartZoneTime.toLocalDateTime();
     }
 
     /**

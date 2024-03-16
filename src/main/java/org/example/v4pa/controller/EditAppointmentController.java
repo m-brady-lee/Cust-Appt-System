@@ -296,9 +296,9 @@ public class EditAppointmentController implements Initializable {
         for(Appointment testAppt : customerAppts) {
             if (!(testAppt.getApptID() == id)) {
                 if(
-                        (testAppt.getApptStart().isBefore(utcEndLDT) && testAppt.getApptStart().isAfter(utcStartLDT)) ||
-                                (testAppt.getApptStart().isBefore(utcStartLDT) && testAppt.getApptEnd().isAfter(utcEndLDT)) ||
-                                (testAppt.getApptEnd().isAfter(utcStartLDT) && testAppt.getApptEnd().isBefore(utcEndLDT))) {
+                        (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
+                                (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                                (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
 
                     conflictingAppts.add(testAppt);
                     testName = editapptCustComboBox.getValue().toString();
@@ -320,8 +320,8 @@ public class EditAppointmentController implements Initializable {
             alert2.setTitle("Scheduling conflict!");
             alert2.setContentText(testName + " has another appointment scheduled during this time:\n" +
                     "\n\t\tAppt. ID: " + testID + "\n" +
-                    "\t\tStart:  " + localOldApptStartLDT + "\n" +
-                    "\t\tEnd:  " + localOldApptEndLDT + "\n" +
+                    "\t\tStart:  " + testStart + "\n" +
+                    "\t\tEnd:  " + testEnd + "\n" +
                     "\n\tPlease choose another start and end time");
             alert2.showAndWait();
             return;
@@ -330,7 +330,7 @@ public class EditAppointmentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save the appointment edits?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                AppointmentQuery.updateAppointment(id, title, description, location, type, utcStartLDT, utcEndLDT, customerID, userID, contactID);
+                AppointmentQuery.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("/org/example/view/appointment-details-view.fxml"));
@@ -362,13 +362,13 @@ public class EditAppointmentController implements Initializable {
         ZonedDateTime utcStartZDT = utcStartLDT.atZone(ZoneId.of("GMT"));
         ZoneId localZoneID = ZoneId.of(TimeZone.getDefault().getID());
         ZonedDateTime localStartZDT = utcStartZDT.withZoneSameInstant(localZoneID);
-        editapptStartTimeText.setText(String.valueOf(localStartZDT.toLocalTime()));
-        editapptStartDatePicker.setValue(localStartZDT.toLocalDate());
+        editapptStartTimeText.setText(String.valueOf(appointment.getApptStart().toLocalTime()));
+        editapptStartDatePicker.setValue(appointment.getApptStart().toLocalDate());
         LocalDateTime utcEndLDT = appointment.getApptEnd();
         ZonedDateTime utcEndZDT = utcEndLDT.atZone(ZoneId.of("GMT"));
         ZonedDateTime localEndZDT = utcEndZDT.withZoneSameInstant(localZoneID);
-        editapptEndTimeText.setText(String.valueOf(localEndZDT.toLocalTime()));
-        editapptEndDatePicker.setValue(localEndZDT.toLocalDate());
+        editapptEndTimeText.setText(String.valueOf(appointment.getApptEnd().toLocalTime()));
+        editapptEndDatePicker.setValue(appointment.getApptEnd().toLocalDate());
         int customerID = appointment.getApptCustomerID();
         editapptCustComboBox.setValue(CustomerFinder.findCustomerName(customerID));
         int userID = appointment.getApptUserID();
