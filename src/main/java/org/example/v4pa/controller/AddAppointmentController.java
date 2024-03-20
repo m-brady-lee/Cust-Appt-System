@@ -295,13 +295,17 @@ public class AddAppointmentController implements Initializable {
         for(Appointment testAppt : customerAppts) {
             if(
                     (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
-                            (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
-                            (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
+                    (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                    (testAppt.getApptStart().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime)) ||
+                    (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime)) ||
+                    testAppt.getApptStart().isEqual(startDateTime) ||
+                    testAppt.getApptEnd().isEqual(endDateTime)) {
+
                 conflictingAppts.add(testAppt);
                 testName = addapptCustComboBox.getValue().toString();
-                testID = testAppt.getApptID();
                 testStart = testAppt.getApptStart();
                 testEnd = testAppt.getApptEnd();
+                testID = testAppt.getApptID();
 
             }
         }

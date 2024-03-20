@@ -297,8 +297,11 @@ public class EditAppointmentController implements Initializable {
             if (!(testAppt.getApptID() == id)) {
                 if(
                         (testAppt.getApptStart().isBefore(endDateTime) && testAppt.getApptStart().isAfter(startDateTime)) ||
-                                (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
-                                (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime))) {
+                        (testAppt.getApptStart().isBefore(startDateTime) && testAppt.getApptEnd().isAfter(endDateTime)) ||
+                        (testAppt.getApptStart().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime)) ||
+                        (testAppt.getApptEnd().isAfter(startDateTime) && testAppt.getApptEnd().isBefore(endDateTime)) ||
+                        testAppt.getApptStart().isEqual(startDateTime) ||
+                        testAppt.getApptEnd().isEqual(endDateTime)) {
 
                     conflictingAppts.add(testAppt);
                     testName = editapptCustComboBox.getValue().toString();
