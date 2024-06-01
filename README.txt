@@ -3,7 +3,7 @@ Title: Customer Appointment System
 Purpose: This is an application that allows a user to add, edit, and delete appointments and customers. The application accepts login credentials and displays appointments scheduled by week or month. Additionally, the application has three reports: appointments by type, contact schedule, and total customers.
 
 Author: Michael Lee
-Contact Information: mlee528@wgu.edu
+Contact Information: m.brady.lee@gmail.com
 Student Application Version: V1
 Date: 3/12/24
 
