@@ -194,3 +194,13 @@ Audit logging for appointment and customer changes
 
 ![Login Screen](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/login_screen.png)
 
+![Appointment Screen](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/appointment_screen.png)
+
+![Edit Appt Screen](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/edit_appt_screen.png)
+
+![Conflicting Appointment](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/conflicting_appt.png)
+
+![Customer Detail](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/customer_detail.png)
+
+![Report Screen](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/report_screen.png)
+
