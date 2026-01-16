@@ -192,4 +192,4 @@ Audit logging for appointment and customer changes
 
 ## SCREENSHOTS
 
-https://github.com/m-brady-lee/Cust-Appt-System/blob/main/login_screen.png
+! [Login Screen](https://github.com/m-brady-lee/Cust-Appt-System/blob/main/login_screen.png)
