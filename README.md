@@ -189,3 +189,6 @@ Improved UI styling and accessibility
 Automated testing for scheduling edge cases
 
 Audit logging for appointment and customer changes
+
+## SCREENSHOTS
+
